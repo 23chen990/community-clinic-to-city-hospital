@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>医院经营首个纵切 · 可点击原型 v0.3.3</title>
+<style>
+:root{
+  --ink:#17324f;--muted:#657d92;--line:#d7e3ed;--panel:rgba(255,255,255,.97);
+  --blue:#2374e5;--blue-dark:#155fc4;--green:#26945c;--orange:#ed8a22;--red:#e74b42;
+  --shadow:0 18px 44px rgba(10,35,57,.22);--soft:0 6px 20px rgba(13,45,70,.14);
+  --stage-w:1600px;--stage-h:900px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:#071825;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+button{font:inherit;color:inherit}
+#app{height:100%;display:flex;flex-direction:column;background:linear-gradient(180deg,#071825,#0e2d42)}
+.prototype-bar{height:58px;flex:0 0 58px;display:flex;align-items:center;gap:9px;padding:0 14px;background:rgba(4,17,27,.96);color:#dcebf6;border-bottom:1px solid rgba(255,255,255,.12);z-index:100}
+.prototype-title{font-weight:900;white-space:nowrap;margin-right:6px}.proto-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#e8f4fc;border-radius:10px;padding:8px 12px;cursor:pointer;white-space:nowrap}.proto-btn.active{background:#2879e8;border-color:#6aa7ff}.proto-spacer{flex:1}.proto-meta{color:#9dc0d6;font-size:13px;white-space:nowrap}.proto-switch{display:flex;align-items:center;gap:6px;padding-left:8px;border-left:1px solid rgba(255,255,255,.14)}
+.viewport{position:relative;flex:1;min-height:0;overflow:hidden}
+.stage{position:absolute;width:var(--stage-w);height:var(--stage-h);transform-origin:0 0;overflow:hidden;background:#bcd2dd;box-shadow:0 28px 90px rgba(0,0,0,.45);border-radius:4px}
+.screen{position:absolute;inset:0;display:none;overflow:hidden;background:linear-gradient(180deg,#cbdde6,#b7ccd8)}.screen.active{display:block}
+.game-card{background:var(--panel);border:1px solid rgba(104,137,162,.34);border-radius:18px;box-shadow:var(--soft)}
+.top-date{position:absolute;left:14px;top:12px;width:260px;height:78px;padding:13px 22px;font-size:25px;font-weight:900;line-height:1.16;z-index:20}.top-date small{display:block;font-size:16px;margin-top:6px;color:#405d75}
+.top-metrics{position:absolute;left:290px;right:390px;top:12px;height:78px;display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden;z-index:20}.metric{display:flex;align-items:center;gap:12px;padding:10px 20px;border-right:1px solid #dbe5ed}.metric:last-child{border-right:0}.metric-icon{font-size:31px}.metric-label{font-size:14px;color:#526b80;font-weight:800}.metric-value{font-size:22px;font-weight:950;margin-top:1px}.green{color:var(--green)}.orange{color:#df701a}.red{color:#d83b34}
+.top-controls{position:absolute;right:14px;top:12px;width:360px;height:78px;display:flex;align-items:center;justify-content:center;gap:12px;z-index:20}.control{height:48px;border:0;border-radius:12px;background:#edf3f8;padding:0 17px;font-weight:900;font-size:18px;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(100,130,150,.08)}.control:hover{filter:brightness(.98)}.control.pause.active{background:#17324f;color:white}.control.speed{min-width:105px;background:#26965c;color:white}.control.settings{width:52px;padding:0;font-size:23px}.speed-menu{position:absolute;right:66px;top:65px;width:105px;padding:7px;display:none;z-index:60}.speed-menu.open{display:grid}.speed-menu button{border:0;background:white;border-radius:8px;padding:8px;font-weight:900;cursor:pointer}.speed-menu button:hover{background:#eef5fb}
+.map{position:absolute;left:14px;right:14px;top:104px;bottom:116px;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,#6d9676 0 12%,#d8d0be 12% 90%,#5f876c 90%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),var(--shadow)}
+.map::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px),radial-gradient(circle at 8% 8%,rgba(255,255,255,.27),transparent 18%);background-size:44px 44px,44px 44px,auto;opacity:.45}
+.hospital{position:absolute;left:230px;right:215px;top:40px;bottom:50px;padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:16px;background:#eee9dc;border:9px solid rgba(245,242,230,.98);border-radius:18px;box-shadow:0 13px 35px rgba(43,50,41,.28)}
+.room{position:relative;border:3px solid #dad5c8;border-radius:12px;overflow:hidden;background:#f4f0e6;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}.room.reception{background:#e8f0ea}.room.gp{background:#f2eadf}.room.lab{background:#e7f0f4}.room.treatment{background:#dff1f0}.room.pharmacy{background:#efe7d8}.room.waiting{background:#e7edef}
+.room::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(79,112,124,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(79,112,124,.08) 1px,transparent 1px);background-size:38px 38px}.room-label{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:linear-gradient(#2f8be6,#1765ba);color:#fff;border-radius:9px;padding:8px 24px;font-weight:950;font-size:18px;white-space:nowrap;box-shadow:0 5px 10px rgba(20,89,151,.3);z-index:3}.counter{position:absolute;left:30px;right:30px;top:92px;height:50px;border-radius:9px;background:#b78f69;box-shadow:0 5px 8px rgba(78,54,36,.15)}.counter.long{left:48px;right:48px}.machine{position:absolute;width:64px;height:72px;border:6px solid #7ea1ae;background:#dbe5e8;border-radius:8px;top:72px}.machine.m1{left:38px}.machine.m2{right:38px}.bed{position:absolute;left:36px;top:88px;width:115px;height:56px;border:7px solid #b8d2d2;background:#f4ffff;border-radius:8px}.chairs{position:absolute;left:32px;right:32px;top:96px;height:84px;background:repeating-linear-gradient(90deg,#5b7d95 0 26px,transparent 26px 38px);border-radius:7px}.person{position:absolute;width:18px;height:18px;border-radius:50%;background:#214f68;border:3px solid #f2bd7b;z-index:4}.person::after{content:"";position:absolute;left:4px;top:15px;width:6px;height:19px;border-radius:5px;background:#255f76}.staff1{left:90px;top:140px}.staff2{right:85px;top:140px}.patient1{left:135px;top:164px}.patient2{right:130px;top:164px}.patient-dot{cursor:pointer}.patient-dot::before{content:"周晴";position:absolute;bottom:32px;left:50%;transform:translateX(-50%);background:#2877df;color:#fff;border-radius:7px;padding:3px 7px;font-size:12px;font-weight:900;white-space:nowrap;opacity:0;transition:.16s}.patient-dot:hover::before{opacity:1}.patient-dot.selected{box-shadow:0 0 0 7px rgba(44,123,229,.22)}
+.queue-line{position:absolute;left:22px;right:22px;bottom:24px;display:flex;justify-content:center;gap:15px}.queue-line i{display:block;width:18px;height:18px;border-radius:50%;background:#24556d;border:3px solid #e9a958;box-shadow:0 12px 0 -5px #24556d}
+.room.alert-room{box-shadow:inset 0 0 0 4px rgba(232,74,62,.55),0 0 0 5px rgba(232,74,62,.16)}.room-alert{position:absolute;right:16px;top:66px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#e84b42;color:#fff;font-size:28px;font-weight:950;border:4px solid white;box-shadow:0 5px 12px rgba(170,41,34,.32);z-index:6}.room-kpi{position:absolute;right:18px;bottom:18px;background:rgba(255,255,255,.96);border:2px solid #e5574e;border-radius:10px;padding:7px 11px;font-size:13px;font-weight:900;z-index:5}.room-kpi span{display:block}.room-kpi b{color:#d83b34}
+.float-stack{position:absolute;z-index:15;left:14px;top:104px;width:255px;display:grid;gap:12px;pointer-events:none}.float-card{pointer-events:auto;overflow:hidden}.float-head{height:52px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;font-size:19px;font-weight:950;cursor:pointer}.float-head button{width:34px;height:34px;border:0;background:transparent;border-radius:9px;font-weight:950;cursor:pointer}.float-head button:hover{background:#edf4f9}.float-body{padding:0 16px 15px;max-height:390px;overflow:auto;transition:.2s}.float-card.collapsed .float-body{display:none}.float-card.collapsed{width:210px}.goal-row{margin:10px 0}.goal-line{display:flex;justify-content:space-between;font-size:14px;color:#415d74;font-weight:800}.progress{height:7px;border-radius:7px;background:#e3ebf2;margin-top:7px;overflow:hidden}.progress i{display:block;height:100%;border-radius:7px;background:#2676e1}.event-primary{border:1.5px solid #f0b869;background:#fff7e7;border-radius:12px;padding:12px;cursor:pointer}.event-primary.danger{border-color:#ec6b62;background:#fff2f0}.event-primary .row{display:flex;justify-content:space-between;gap:8px;font-weight:950;color:#c66c11}.event-primary.danger .row{color:#d43b34}.event-primary small{display:block;margin-top:5px;color:#536c80;line-height:1.4}.event-list{margin-top:8px}.event-item{display:grid;grid-template-columns:48px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid #eaf0f4;font-size:13px;color:#577086}.event-item:last-child{border-bottom:0}.event-item b{color:#17324f}
+.bottom-toolbar{position:absolute;left:345px;right:345px;bottom:10px;height:92px;display:grid;grid-template-columns:repeat(6,1fr);overflow:hidden;z-index:20}.tool{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;cursor:pointer;border-right:1px solid #dfe7ed}.tool:last-child{border-right:0}.tool b{font-size:28px;margin-bottom:4px}.tool:hover{background:#f2f7fb}
+.context-panel{position:absolute;right:14px;top:104px;bottom:116px;width:380px;z-index:30;display:flex;flex-direction:column;overflow:hidden;transform:translateX(0);transition:.22s}.context-panel.hidden{display:none}.context-panel.collapsed{width:62px;bottom:auto;height:210px}.context-panel.collapsed .panel-body,.context-panel.collapsed .panel-title span,.context-panel.collapsed .panel-close{display:none}.context-panel.collapsed .panel-head{height:100%;writing-mode:vertical-rl;justify-content:center;gap:10px;padding:12px}.panel-head{height:58px;flex:0 0 58px;background:linear-gradient(#ed594f,#d9453e);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 15px;font-size:20px;font-weight:950}.panel-actions{display:flex;align-items:center;gap:7px}.panel-head button{border:0;background:rgba(255,255,255,.16);color:white;width:34px;height:34px;border-radius:10px;font-size:19px;cursor:pointer}.panel-body{flex:1;min-height:0;background:#fbfdff;overflow:auto;padding:12px}.subsection{border-bottom:1px solid #e4edf3;padding-bottom:11px;margin-bottom:11px}.subsection:last-child{border-bottom:0;margin-bottom:0}.sub-head{display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:950;margin-bottom:9px;cursor:pointer}.sub-head button{border:0;background:transparent;font-weight:950;cursor:pointer}.subsection.collapsed .sub-content{display:none}.flow-row{display:grid;grid-template-columns:1fr 18px 1fr 18px 1fr;gap:4px;align-items:stretch}.flow-stage{position:relative;border-radius:12px;background:#fff;border:1px solid #dce6ee;padding:11px 6px 9px;text-align:center;min-height:144px}.flow-stage.warn{background:#fff7ec}.flow-stage.hot{background:#fff0ee;border-color:transparent}.flow-stage .icon{font-size:31px}.flow-stage h4{margin:4px 0 7px;font-size:15px}.flow-stage .qty{font-weight:950;font-size:16px}.flow-stage .cap{display:block;margin-top:5px;font-size:12px;color:#5d7386}.stage-bar{height:6px;border-radius:6px;background:#e8eef3;margin-top:9px;overflow:hidden}.stage-bar i{display:block;height:100%;border-radius:6px;background:#2e7ce2}.flow-stage.warn .stage-bar i{background:#ef932f}.flow-stage.hot .stage-bar i{background:#e64d44}.single-alert{position:absolute;right:7px;top:7px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#e64940;color:#fff;font-size:18px;font-weight:950;box-shadow:0 3px 8px rgba(178,44,36,.25)}.flow-arrow{display:grid;place-items:center;color:#75899a;font-size:20px}.queue-header{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:950;margin-bottom:6px}.queue-list{display:grid}.queue-person{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:8px;padding:7px 2px;border-bottom:1px solid #e8eef3;font-size:13px}.queue-person:last-child{border-bottom:0}.mini-face{width:27px;height:27px;border-radius:50%;background:#f2bc78;position:relative}.mini-face::after{content:"";position:absolute;left:5px;right:5px;top:-4px;height:10px;border-radius:10px 10px 4px 4px;background:#2b2a28}.wait{font-weight:900;color:#3f5870}.wait.long{color:#df443c}
+.options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.option{position:relative;border:1px solid #dce5ec;background:white;border-radius:12px;padding:12px 5px 10px;min-height:100px;text-align:center;font-weight:900;cursor:pointer}.option .ico{font-size:31px;display:block;margin-bottom:8px}.option.selected{border:2px solid #2d78e1;background:#f7fbff;color:#1e67c9}.option.selected::after{content:"✓";position:absolute;right:-7px;top:-8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#2674dc;color:white;border:3px solid white}.impact-card{margin-top:10px;border:1.5px solid #9fc3f2;background:#f8fbff;border-radius:12px;padding:12px}.impact-title{font-weight:950;color:#215fae}.impact-main{font-size:22px;font-weight:950;margin:5px 0 7px}.before{color:#df4a40}.after{color:#228b54}.impact-lines{display:grid;gap:4px;font-size:13px}.impact-lines div{display:flex;gap:7px;align-items:center}.execute{width:100%;border:0;border-radius:12px;background:linear-gradient(#347fe9,#1f63cb);color:#fff;font-size:18px;font-weight:950;padding:14px;cursor:pointer;margin-top:10px}.panel-links{display:flex;justify-content:space-between;gap:8px;margin-top:10px}.link-btn{border:0;background:transparent;color:#246cc5;text-decoration:underline;font-weight:800;cursor:pointer;font-size:12px}.patient-panel .panel-head{background:linear-gradient(#3885e9,#2167c9)}.patient-summary{display:flex;gap:12px;align-items:center;padding:8px;border-radius:13px;background:white;border:1px solid #dce5ec}.avatar{width:72px;height:72px;border-radius:50%;background:#f0bc77;position:relative;box-shadow:inset 0 -12px 0 #d58f49}.avatar::after{content:"";position:absolute;left:12px;right:12px;top:-1px;height:34px;border-radius:28px 28px 12px 12px;background:#2e2a28}.patient-name{font-size:22px;font-weight:950}.muted{color:var(--muted);font-size:13px}.status-list{margin-top:12px;border:1px solid #dce5ec;border-radius:12px;overflow:hidden}.status-row{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid #e5edf3;background:white}.status-row:last-child{border-bottom:0}.pill{border-radius:999px;padding:5px 10px;color:#fff;font-size:12px;font-weight:950}.pill.orange{background:#e48b18}.pill.blue{background:#2d77dd}.pill.gray{background:#7c8d9b}.patient-actions{display:grid;gap:9px;margin-top:auto;padding-top:12px}.secondary{border:2px solid #2c74d8;background:white;color:#2465bd;border-radius:11px;padding:12px;font-weight:950;cursor:pointer}.primary{border:0;background:linear-gradient(#3684ee,#2166cf);color:white;border-radius:11px;padding:14px;font-weight:950;font-size:17px;cursor:pointer}
+.recovery-panel .panel-head{background:linear-gradient(#35a268,#237f50)}.recovery-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.recovery-kpi div{border-radius:11px;background:white;border:1px solid #dce5ec;padding:10px;text-align:center}.recovery-kpi span{display:block;color:#657c90;font-size:12px}.recovery-kpi b{display:block;font-size:22px;margin-top:3px}.big-progress{height:12px;border-radius:10px;background:#e5edf2;margin:14px 0;overflow:hidden}.big-progress i{display:block;height:100%;width:74%;background:linear-gradient(90deg,#ef8d24,#27945b);transition:.6s}.route-cards{display:grid;gap:8px}.route-card{display:flex;align-items:center;justify-content:space-between;background:white;border:1px solid #dce6ed;border-radius:11px;padding:10px;font-size:13px}.route-card b{color:#226bc4}.feedback-actions{display:grid;gap:9px;margin-top:16px}
+.settle-screen{background:linear-gradient(rgba(10,27,41,.35),rgba(8,23,36,.62)),linear-gradient(180deg,#5e8069 0 15%,#d5ccb9 15% 90%,#4c725d 90%)}.settle-bg{position:absolute;inset:94px 0 0;opacity:.48;filter:saturate(.85)}.settle-top-date{position:absolute;left:14px;top:12px;width:300px;height:78px;padding:19px 24px;font-weight:950;font-size:24px;z-index:10}.settle-top-metrics{position:absolute;left:330px;top:12px;width:540px;height:78px;display:grid;grid-template-columns:1fr;z-index:10}.settle-settings{position:absolute;right:14px;top:12px;width:72px;height:72px;display:grid;place-items:center;font-size:28px;z-index:10}.settlement-card{position:absolute;left:50%;top:105px;bottom:28px;width:1010px;transform:translateX(-50%);padding:18px 28px 20px;z-index:20;overflow:auto}.settle-title{text-align:center;font-size:38px;font-weight:950;color:#142d60;margin:0 0 12px}.sunset{height:120px;border-radius:18px;overflow:hidden;position:relative;background:linear-gradient(180deg,#f8c081,#f2a866 46%,#6d8b75 47%,#45674e);box-shadow:inset 0 0 0 1px rgba(83,106,106,.25)}.sunset::before{content:"";position:absolute;left:55px;right:55px;bottom:19px;height:55px;background:linear-gradient(90deg,#2f5362 0 13%,transparent 13% 17%,#3c6470 17% 31%,transparent 31% 36%,#345a67 36% 48%,transparent 48% 57%,#3b626e 57% 73%,transparent 73% 78%,#315665 78%);clip-path:polygon(0 50%,8% 50%,8% 22%,15% 22%,15% 52%,24% 52%,24% 5%,33% 5%,33% 52%,44% 52%,44% 28%,55% 28%,55% 55%,68% 55%,68% 12%,78% 12%,78% 55%,100% 55%,100% 100%,0 100%)}.sunset::after{content:"";position:absolute;right:130px;top:24px;width:45px;height:45px;border-radius:50%;background:#fff1b0;box-shadow:0 0 40px #ffe29a}.section-title{display:flex;align-items:center;gap:12px;margin:18px 0 10px;color:#1c64c4;font-size:21px;font-weight:950}.section-title::before,.section-title::after{content:"";height:1px;background:#cbdbe7;flex:1}.hospital-stats{display:grid;grid-template-columns:1.05fr 1.15fr repeat(5,.88fr);border:1px solid #dce5ec;border-radius:14px;background:white;overflow:hidden}.h-stat{padding:13px 10px;text-align:center;border-right:1px solid #e2e9ee}.h-stat:last-child{border-right:0}.h-stat span{display:block;color:#637b8f;font-size:12px;font-weight:800}.h-stat b{display:block;font-size:20px;margin-top:5px}.department-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.dept-card{border:1px solid #d9e4ec;background:white;border-radius:13px;padding:12px 9px;min-height:90px;text-align:left;cursor:pointer;position:relative}.dept-card:hover,.dept-card.selected{border-color:#4c8fe8;background:#f7fbff}.dept-card h4{font-size:14px;margin:0 0 11px}.dept-status{display:flex;align-items:center;gap:7px;font-weight:900;font-size:13px}.status-dot{width:9px;height:9px;border-radius:50%;background:#2a9a5e}.status-dot.orange{background:#ea891d}.status-dot.blue{background:#4f90d8}.dept-card::after{content:"›";position:absolute;right:10px;bottom:10px;color:#2671d5;font-weight:950}.dept-detail{display:none;margin-top:10px;border:1px solid #b9d3f1;background:#f6faff;border-radius:13px;padding:12px}.dept-detail.open{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.detail-kpi{background:white;border-radius:10px;border:1px solid #dce6ee;padding:10px}.detail-kpi span{display:block;color:#657c91;font-size:12px}.detail-kpi b{display:block;margin-top:4px;font-size:17px}.settle-actions{display:grid;grid-template-columns:1fr 1.2fr;gap:18px;margin-top:14px}.settle-actions button{height:74px;border-radius:14px;font-weight:950;font-size:23px;cursor:pointer}.settle-actions .secondary{background:white}.settle-actions .primary{font-size:25px}
+.toast{position:absolute;left:50%;bottom:125px;transform:translate(-50%,18px);background:#17324f;color:#fff;border-radius:12px;padding:11px 18px;font-weight:900;z-index:80;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+/* phone landscape simplification */
+.stage.phone{--stage-w:1600px;--stage-h:720px}.stage.phone .top-date{height:68px;width:225px;padding:10px 18px;font-size:22px}.stage.phone .top-date small{font-size:14px;margin-top:3px}.stage.phone .top-metrics{left:250px;right:330px;height:68px}.stage.phone .top-controls{height:68px;width:305px}.stage.phone .metric{padding:8px 15px}.stage.phone .metric.optional{display:none}.stage.phone .top-metrics{grid-template-columns:repeat(3,1fr)}.stage.phone .map{top:90px;bottom:94px}.stage.phone .float-stack{top:90px;width:220px}.stage.phone .float-card:not(.collapsed){max-height:255px}.stage.phone .float-card:not(.collapsed) .float-body{max-height:200px}.stage.phone .bottom-toolbar{left:270px;right:270px;height:78px;bottom:7px}.stage.phone .tool b{font-size:23px}.stage.phone .hospital{left:160px;right:160px;top:20px;bottom:28px;gap:10px}.stage.phone .room-label{font-size:15px;padding:6px 17px}.stage.phone .context-panel{top:90px;bottom:94px;width:470px}.stage.phone .context-panel:not(.hidden){box-shadow:-8px 0 28px rgba(10,32,50,.2)}.stage.phone .flow-stage{min-height:118px;padding-top:8px}.stage.phone .flow-stage .icon{font-size:25px}.stage.phone .queue-person{padding:5px 2px}.stage.phone .settlement-card{top:85px;bottom:15px;width:1120px}.stage.phone .sunset{height:82px}.stage.phone .settle-title{font-size:31px}.stage.phone .section-title{margin:12px 0 8px}.stage.phone .h-stat{padding:9px 7px}.stage.phone .department-grid{gap:6px}.stage.phone .dept-card{min-height:73px;padding:9px}.stage.phone .settle-actions button{height:58px}.stage.phone .settle-top-date{height:68px}.stage.phone .settle-top-metrics{height:68px}.stage.phone .settle-settings{height:62px;width:62px}.stage.phone .settle-bg{inset:82px 0 0}
+@media (max-width:900px){.prototype-title,.proto-meta{display:none}.prototype-bar{overflow-x:auto}.proto-btn{padding:7px 10px}}
+
+/* v0.3 — content-sized cards + genuinely different phone layout */
+.float-stack{width:auto;align-items:start}
+.float-card{width:auto;max-width:310px}
+.float-card[data-float="goals"]{width:255px}
+.float-card[data-float="events"]{width:285px}
+.float-card.collapsed[data-float="goals"]{width:188px}
+.float-card.collapsed[data-float="events"]{width:205px}
+.float-card.collapsed .float-head{height:46px;font-size:17px}
+
+/* Tablet: each context panel has its own natural size; it no longer stretches to the bottom. */
+.stage:not(.phone) .context-panel{
+  bottom:auto;height:auto;min-width:300px;min-height:116px;max-width:560px;
+  max-height:calc(100% - 220px);resize:both;
+}
+.stage:not(.phone) .context-panel .panel-body{flex:0 1 auto;min-height:0;overflow:auto}
+.stage:not(.phone) .patient-panel{max-height:520px}
+.stage:not(.phone) #labPanel{max-height:680px}
+.stage:not(.phone) .recovery-panel{max-height:520px}
+.context-panel.panel-size-s{width:330px}
+.context-panel.panel-size-m{width:410px}
+.context-panel.panel-size-l{width:535px}
+.context-panel.panel-size-l .flow-stage{min-height:128px}
+.context-panel.panel-size-l .panel-body{padding:14px}
+.context-panel.collapsed{resize:none!important}
+.patient-body{display:flex;flex-direction:column}
+
+/* Settlement cards are not forced into six identical blocks. */
+.department-grid{display:flex;gap:8px}
+.dept-card{flex:1 1 0}
+.dept-card:nth-child(2),.dept-card:nth-child(3),.dept-card:nth-child(6){flex-grow:1.22}
+.dept-card:nth-child(5){flex-grow:.88}
+
+/* Phone landscape is a separate composition, not a compressed tablet. */
+.stage.phone .top-date{left:8px;top:8px;width:182px;height:58px;padding:8px 14px;font-size:19px;border-radius:14px}
+.stage.phone .top-date small{font-size:12px;margin-top:2px}
+.stage.phone .top-metrics{left:198px;right:236px;top:8px;height:58px;grid-template-columns:repeat(3,minmax(0,1fr));border-radius:14px}
+.stage.phone .top-controls{right:8px;top:8px;width:220px;height:58px;gap:6px;border-radius:14px}
+.stage.phone .top-controls .control{height:40px;padding:0 11px;font-size:15px;border-radius:10px}
+.stage.phone .top-controls .control.speed{min-width:78px}
+.stage.phone .top-controls .control.settings{width:40px;padding:0}
+.stage.phone .metric{gap:7px;padding:5px 10px}
+.stage.phone .metric-icon{font-size:23px}
+.stage.phone .metric-label{font-size:11px}
+.stage.phone .metric-value{font-size:17px}
+.stage.phone .metric.optional{display:none}
+.stage.phone .map{left:8px;right:8px;top:74px;bottom:72px;border-radius:16px}
+.stage.phone .hospital{left:32px;right:32px;top:14px;bottom:18px;gap:9px;border-width:6px;padding:9px}
+.stage.phone .room-label{font-size:13px;padding:5px 13px;top:7px}
+.stage.phone .counter{top:68px;height:38px}.stage.phone .counter.long{left:32px;right:32px}
+.stage.phone .machine{top:58px;width:52px;height:60px}.stage.phone .bed{top:64px}
+.stage.phone .chairs{top:72px;height:64px}
+.stage.phone .float-stack{left:8px;top:78px;gap:7px;z-index:26}
+.stage.phone .float-card{max-width:300px}
+.stage.phone .float-card.collapsed{width:auto!important;border-radius:999px}
+.stage.phone .float-card.collapsed .float-head{height:40px;padding:0 12px;font-size:14px;gap:8px}
+.stage.phone .float-card.collapsed .float-head button{width:26px;height:26px}
+.stage.phone .float-card:not(.collapsed){width:300px!important;max-height:260px}
+.stage.phone .float-card:not(.collapsed) .float-body{max-height:205px}
+.stage.phone .bottom-toolbar{left:70px;right:70px;bottom:6px;height:60px;border-radius:14px}
+.stage.phone .tool{font-size:12px}.stage.phone .tool b{font-size:19px;margin-bottom:1px}
+.stage.phone .speed-menu{right:48px;top:49px}
+
+/* Mobile context rules: patient = sheet; operational/detail flows = full-screen route. */
+.stage.phone .context-panel{resize:none;transition:.18s;max-width:none;max-height:none}
+.stage.phone .context-panel [data-panel-collapse]{display:none}
+.stage.phone .context-panel.mobile-full{
+  inset:0!important;width:100%!important;height:100%!important;max-height:none!important;
+  border-radius:0;z-index:95;box-shadow:none;
+}
+.stage.phone .context-panel.mobile-sheet{
+  left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;
+  height:auto!important;max-height:78%!important;border-radius:22px 22px 0 0;z-index:95;
+  box-shadow:0 -16px 42px rgba(7,24,37,.34);
+}
+.stage.phone .context-panel.mobile-full .panel-head{height:52px;flex-basis:52px;padding:0 14px;font-size:18px}
+.stage.phone .context-panel.mobile-sheet .panel-head{height:50px;flex-basis:50px;border-radius:21px 21px 0 0}
+.stage.phone .context-panel .panel-body{max-height:none;padding:10px 12px}
+.stage.phone #labPanel.mobile-full .panel-body{
+  display:grid;grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);
+  grid-template-areas:"flow queue" "actions actions";align-content:start;gap:10px;overflow:auto;
+}
+.stage.phone #labPanel .subsection{margin:0;padding:10px;border:1px solid #dce6ee;border-radius:14px;background:#fbfdff}
+.stage.phone #labPanel .subsection:nth-child(1){grid-area:flow}
+.stage.phone #labPanel .subsection:nth-child(2){grid-area:queue}
+.stage.phone #labPanel .subsection:nth-child(3){grid-area:actions}
+.stage.phone #labPanel .flow-stage{min-height:113px;padding:7px 5px}
+.stage.phone #labPanel .flow-stage .icon{font-size:24px}
+.stage.phone #labPanel .flow-stage h4{font-size:13px;margin:2px 0 5px}
+.stage.phone #labPanel .flow-stage .qty{font-size:14px}
+.stage.phone #labPanel .flow-stage .cap{font-size:11px}
+.stage.phone #labPanel .subsection:nth-child(3) .sub-content{
+  display:grid;grid-template-columns:minmax(360px,.9fr) minmax(420px,1.1fr);gap:10px;align-items:start;
+}
+.stage.phone #labPanel .options{grid-column:1;grid-row:1 / span 3}
+.stage.phone #labPanel .impact-card{grid-column:2;margin-top:0}
+.stage.phone #labPanel .execute{grid-column:2;margin-top:0}
+.stage.phone #labPanel .panel-links{grid-column:2;margin-top:0}
+.stage.phone .queue-person{padding:5px 2px}
+
+.stage.phone .patient-panel.mobile-sheet{max-height:68%!important}
+.stage.phone .patient-panel .patient-body{display:grid;grid-template-columns:.85fr 1.25fr;gap:12px;align-items:start}
+.stage.phone .patient-panel .patient-summary{grid-column:1;grid-row:1 / span 2}
+.stage.phone .patient-panel .status-list{grid-column:2;margin-top:0}
+.stage.phone .patient-panel .patient-actions{grid-column:2;display:grid;grid-template-columns:1fr 1.2fr;margin-top:0;padding-top:0;align-self:end}
+
+.stage.phone .recovery-panel.mobile-full .panel-body{
+  display:grid;grid-template-columns:minmax(280px,.72fr) minmax(420px,1.28fr);
+  grid-template-areas:"kpi routes" "bar routes" "actions actions";gap:12px;align-content:start;overflow:auto;padding:14px;
+}
+.stage.phone .recovery-panel .recovery-kpi{grid-area:kpi}
+.stage.phone .recovery-panel .big-progress{grid-area:bar;margin:0}
+.stage.phone .recovery-panel .route-cards{grid-area:routes}
+.stage.phone .recovery-panel .feedback-actions{grid-area:actions;grid-template-columns:1fr 1.25fr;margin-top:0}
+
+/* Settlement on phone is a dedicated full-screen page. */
+.stage.phone #screen-settlement .settle-top-date,
+.stage.phone #screen-settlement .settle-top-metrics,
+.stage.phone #screen-settlement .settle-settings,
+.stage.phone #screen-settlement .settle-bg{display:none}
+.stage.phone #screen-settlement .settlement-card{
+  inset:0;width:100%;height:100%;transform:none;border-radius:0;padding:12px 18px 10px;overflow:auto;
+}
+.stage.phone #screen-settlement .settle-title{font-size:28px;margin:0 0 7px}
+.stage.phone #screen-settlement .sunset{height:66px;border-radius:13px}
+.stage.phone #screen-settlement .section-title{font-size:17px;margin:9px 0 6px}
+.stage.phone #screen-settlement .hospital-stats{grid-template-columns:repeat(4,1fr)}
+.stage.phone #screen-settlement .h-stat{padding:7px 6px;border-bottom:1px solid #e2e9ee}
+.stage.phone #screen-settlement .h-stat b{font-size:16px}
+.stage.phone #screen-settlement .department-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.stage.phone #screen-settlement .dept-card{min-height:62px;padding:8px;flex:none}
+.stage.phone #screen-settlement .dept-card h4{font-size:12px;margin-bottom:5px}
+.stage.phone #screen-settlement .dept-detail.open{grid-template-columns:repeat(4,1fr);margin-top:6px;padding:8px}
+.stage.phone #screen-settlement .settle-actions{position:sticky;bottom:0;background:rgba(255,255,255,.96);padding-top:8px;margin-top:8px}
+.stage.phone #screen-settlement .settle-actions button{height:52px;font-size:19px}
+
+@media (max-aspect-ratio: 1.9/1){
+  .stage.phone #labPanel.mobile-full .panel-body{grid-template-columns:1fr;grid-template-areas:"flow" "queue" "actions"}
+  .stage.phone #labPanel .subsection:nth-child(3) .sub-content{grid-template-columns:1fr}
+  .stage.phone #labPanel .options,.stage.phone #labPanel .impact-card,.stage.phone #labPanel .execute,.stage.phone #labPanel .panel-links{grid-column:1;grid-row:auto}
+}
+
+
+/* v0.3.1 final responsive overrides */
+.stage.phone{--stage-w:1440px;--stage-h:720px}
+.phone-more{display:none}
+.stage.phone .bottom-toolbar{grid-template-columns:repeat(5,1fr)}
+.stage.phone .bottom-toolbar .tool:nth-child(5),
+.stage.phone .bottom-toolbar .tool:nth-child(6){display:none}
+.stage.phone .bottom-toolbar .phone-more{display:flex}
+/* The phone preview is already a fixed landscape canvas; do not let the desktop browser aspect ratio collapse it. */
+.stage.phone #labPanel.mobile-full .panel-body{
+  grid-template-columns:minmax(0,1.08fr) minmax(330px,.92fr)!important;
+  grid-template-areas:"flow queue" "actions actions"!important;
+}
+.stage.phone #labPanel .subsection:nth-child(3) .sub-content{
+  grid-template-columns:minmax(330px,.9fr) minmax(390px,1.1fr)!important;
+}
+.stage.phone #labPanel .options{grid-column:1!important;grid-row:1 / span 3!important}
+.stage.phone #labPanel .impact-card,
+.stage.phone #labPanel .execute,
+.stage.phone #labPanel .panel-links{grid-column:2!important}
+
+
+/* v0.3.2 — phone landscape keeps the live map underneath large floating panels. */
+.stage.phone .context-panel{
+  resize:none;
+  max-width:none;
+  max-height:none;
+  transition:width .18s,height .18s,top .18s,right .18s,transform .18s;
+}
+.stage.phone .context-panel [data-panel-collapse]{display:inline-grid;place-items:center}
+
+/* Operational panels: large floating cards, never full-screen. */
+.stage.phone .context-panel.mobile-overlay{
+  left:auto!important;
+  right:12px!important;
+  top:84px!important;
+  bottom:auto!important;
+  width:76%!important;
+  height:78%!important;
+  max-height:78%!important;
+  border-radius:20px!important;
+  z-index:95;
+  box-shadow:0 22px 60px rgba(7,24,37,.36)!important;
+  transform:none!important;
+}
+.stage.phone .context-panel.mobile-overlay.mobile-overlay-large{
+  width:80%!important;
+  height:80%!important;
+  max-height:80%!important;
+  top:74px!important;
+}
+.stage.phone .context-panel.mobile-overlay .panel-head{
+  height:52px;
+  flex-basis:52px;
+  padding:0 14px;
+  font-size:18px;
+  border-radius:19px 19px 0 0;
+}
+.stage.phone .context-panel.mobile-overlay .panel-body{
+  max-height:none;
+  min-height:0;
+  overflow:auto;
+  padding:10px 12px;
+}
+
+/* A collapsed phone panel becomes a compact edge tab; the map remains fully visible. */
+.stage.phone .context-panel.mobile-overlay.collapsed{
+  left:auto!important;
+  right:10px!important;
+  top:92px!important;
+  bottom:auto!important;
+  width:56px!important;
+  height:206px!important;
+  max-height:206px!important;
+  border-radius:16px!important;
+}
+.stage.phone .context-panel.mobile-overlay.collapsed .panel-body,
+.stage.phone .context-panel.mobile-overlay.collapsed [data-panel-size],
+.stage.phone .context-panel.mobile-overlay.collapsed .panel-close{display:none!important}
+.stage.phone .context-panel.mobile-overlay.collapsed .panel-head{
+  height:100%;flex-basis:100%;writing-mode:vertical-rl;
+  justify-content:center;gap:9px;padding:12px 8px;border-radius:15px;
+}
+
+/* Patient detail remains a bottom sheet, but it also never covers the whole screen. */
+.stage.phone .context-panel.mobile-sheet{
+  left:8%!important;
+  right:8%!important;
+  top:auto!important;
+  bottom:10px!important;
+  width:auto!important;
+  height:auto!important;
+  max-height:66%!important;
+  border-radius:20px!important;
+  z-index:95;
+  box-shadow:0 -12px 38px rgba(7,24,37,.32)!important;
+}
+.stage.phone .context-panel.mobile-sheet.mobile-sheet-large{
+  left:5%!important;right:5%!important;max-height:78%!important;
+}
+.stage.phone .context-panel.mobile-sheet .panel-head{
+  height:50px;flex-basis:50px;border-radius:19px 19px 0 0;
+}
+
+/* Lab layout inside the floating operational panel. */
+.stage.phone #labPanel.mobile-overlay .panel-body{
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr)!important;
+  grid-template-areas:"flow queue" "actions actions"!important;
+  align-content:start;
+  gap:10px;
+  overflow:auto;
+}
+.stage.phone #labPanel.mobile-overlay .subsection:nth-child(3) .sub-content{
+  display:grid;
+  grid-template-columns:minmax(300px,.9fr) minmax(350px,1.1fr)!important;
+  gap:10px;
+  align-items:start;
+}
+.stage.phone #labPanel.mobile-overlay .options{grid-column:1!important;grid-row:1 / span 3!important}
+.stage.phone #labPanel.mobile-overlay .impact-card,
+.stage.phone #labPanel.mobile-overlay .execute,
+.stage.phone #labPanel.mobile-overlay .panel-links{grid-column:2!important}
+
+/* Recovery is also a floating card over the map. */
+.stage.phone .recovery-panel.mobile-overlay .panel-body{
+  display:grid;
+  grid-template-columns:minmax(250px,.72fr) minmax(360px,1.28fr);
+  grid-template-areas:"kpi routes" "bar routes" "actions actions";
+  gap:12px;
+  align-content:start;
+  overflow:auto;
+  padding:14px;
+}
+.stage.phone .recovery-panel.mobile-overlay .recovery-kpi{grid-area:kpi}
+.stage.phone .recovery-panel.mobile-overlay .big-progress{grid-area:bar;margin:0}
+.stage.phone .recovery-panel.mobile-overlay .route-cards{grid-area:routes}
+.stage.phone .recovery-panel.mobile-overlay .feedback-actions{grid-area:actions;grid-template-columns:1fr 1.25fr;margin-top:0}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="prototype-bar">
+    <div class="prototype-title">首个经营纵切 · 可点击原型 v0.3.3</div>
+    <button class="proto-btn active" data-screen="main">1 正常经营</button>
+    <button class="proto-btn" data-screen="congestion">2 化验拥堵</button>
+    <button class="proto-btn" data-screen="settlement">3 班次结算</button>
+    <div class="proto-spacer"></div>
+    <div class="proto-switch"><span>设备</span><button class="proto-btn active" id="tabletMode">平板</button><button class="proto-btn" id="phoneMode">手机横屏</button></div>
+    <div class="proto-switch"><span>夜班</span><button class="proto-btn" id="nightToggle">未解锁</button></div>
+    <div class="proto-meta">UX REVIEW</div>
+  </div>
+  <div class="viewport" id="viewport"><div class="stage" id="stage">
+
+    <!-- 1 normal operation -->
+    <section class="screen active" id="screen-main">
+      <div class="top-date game-card">第8日&nbsp;&nbsp;10:30<small>白班</small></div>
+      <div class="top-metrics game-card">
+        <div class="metric"><div class="metric-icon">💵</div><div><div class="metric-label">现金</div><div class="metric-value green">¥ 268,450</div></div></div>
+        <div class="metric"><div class="metric-icon">🛡️</div><div><div class="metric-label">综合质量</div><div class="metric-value">82%</div></div></div>
+        <div class="metric"><div class="metric-icon">◉</div><div><div class="metric-label">当前医院负荷</div><div class="metric-value orange">68%</div></div></div>
+        <div class="metric optional"><div class="metric-icon">👥</div><div><div class="metric-label">接诊人数</div><div class="metric-value">56/80</div></div></div>
+      </div>
+      <div class="top-controls game-card">
+        <button class="control pause" data-pause>Ⅱ 暂停</button>
+        <button class="control speed" data-speed>1x ▾</button>
+        <button class="control settings">⚙</button>
+        <div class="speed-menu game-card" data-speed-menu><button data-set-speed="0.5x">0.5x</button><button data-set-speed="1x">1x</button><button data-set-speed="2x">2x</button></div>
+      </div>
+      <div class="map" data-map>
+        <div class="hospital">
+          <div class="room reception"><div class="room-label">接待与分诊</div><div class="counter"></div><div class="person staff1"></div><div class="person patient1"></div><div class="queue-line"><i></i><i></i><i></i></div></div>
+          <div class="room gp"><div class="room-label">全科门诊</div><div class="counter long"></div><div class="person staff1"></div><div class="person patient2 patient-dot" id="patientZhou"></div></div>
+          <div class="room lab" id="labRoomMain"><div class="room-label">基础化验室</div><div class="machine m1"></div><div class="machine m2"></div><div class="person staff1"></div><div class="person staff2"></div></div>
+          <div class="room treatment"><div class="room-label">治疗室</div><div class="bed"></div><div class="person staff2"></div></div>
+          <div class="room pharmacy"><div class="room-label">药房</div><div class="counter long"></div><div class="person staff1"></div><div class="person patient2"></div></div>
+          <div class="room waiting"><div class="room-label">候诊区</div><div class="chairs"></div><div class="queue-line"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        </div>
+      </div>
+      <div class="float-stack">
+        <div class="float-card game-card collapsible" data-float="goals"><div class="float-head"><span>🎯 今日目标</span><button data-collapse>⌃</button></div><div class="float-body">
+          <div class="goal-row"><div class="goal-line"><span>接诊80名患者</span><b>56/80</b></div><div class="progress"><i style="width:70%"></i></div></div>
+          <div class="goal-row"><div class="goal-line"><span>完成30次治疗</span><b>18/30</b></div><div class="progress"><i style="width:60%"></i></div></div>
+          <div class="goal-row"><div class="goal-line"><span>完成40份化验</span><b>22/40</b></div><div class="progress"><i style="width:55%"></i></div></div>
+          <div class="goal-row"><div class="goal-line"><span>患者满意度 ≥ 80%</span><b>82%</b></div><div class="progress"><i style="width:82%"></i></div></div>
+        </div></div>
+        <div class="float-card game-card collapsible" data-float="events"><div class="float-head"><span>🕘 事件轨道</span><button data-collapse>⌃</button></div><div class="float-body">
+          <div class="event-primary" id="eventWarning"><div class="row"><span>↗ 趋势预警</span><span>›</span></div><b>化验申请正在增加</b><small>预计 60 秒后进入高负荷</small></div>
+          <div class="event-list"><div class="event-item"><span>10:15</span><div><b>新患者到达高峰已开始</b><br>预计 15 分钟</div></div><div class="event-item"><span>09:40</span><div><b>基础化验室设备维护完成</b><br>效率 +10%</div></div><div class="event-item"><span>09:05</span><div><b>骨科区已上班</b><br>全科医生 +1</div></div></div>
+        </div></div>
+      </div>
+      <div class="bottom-toolbar game-card"><button class="tool"><b>🏗️</b>建设</button><button class="tool"><b>👥</b>员工</button><button class="tool"><b>➕</b>科室</button><button class="tool"><b>📋</b>制度</button><button class="tool"><b>💼</b>财务</button><button class="tool"><b>📈</b>报告</button></div>
+      <aside class="context-panel patient-panel panel-size-s game-card hidden" id="patientPanel"><div class="panel-head"><span>患者摘要</span><div class="panel-actions"><button data-panel-size title="调整面板尺寸">↗</button><button data-panel-collapse>‹</button><button class="panel-close" id="closePatient">×</button></div></div><div class="panel-body patient-body"><div class="patient-summary"><div class="avatar"></div><div><div class="patient-name">周晴</div><div class="muted">女 · 28岁</div><div class="muted">病历号：00084752</div></div></div><div class="status-list"><div class="status-row"><b>风险</b><span class="pill orange">中</span></div><div class="status-row"><b>耐心</b><span class="pill blue">正常</span></div><div class="status-row"><b>当前步骤</b><span class="pill blue">全科初诊</span></div><div class="status-row"><b>下一步</b><span class="pill gray">等待医生决定</span></div></div><div class="patient-actions"><button class="secondary">定位患者</button><button class="primary">查看病历</button></div></div></aside>
+    </section>
+
+    <!-- 2 lab congestion -->
+    <section class="screen" id="screen-congestion">
+      <div class="top-date game-card">第8日&nbsp;&nbsp;10:45<small>白班</small></div>
+      <div class="top-metrics game-card">
+        <div class="metric"><div class="metric-icon">💵</div><div><div class="metric-label">现金</div><div class="metric-value green">¥ 268,450</div></div></div>
+        <div class="metric"><div class="metric-icon">🛡️</div><div><div class="metric-label">综合质量</div><div class="metric-value">82%</div></div></div>
+        <div class="metric"><div class="metric-icon">◉</div><div><div class="metric-label">当前医院负荷</div><div class="metric-value red">104%</div></div></div>
+        <div class="metric optional"><div class="metric-icon">👥</div><div><div class="metric-label">接诊人数</div><div class="metric-value">56/80</div></div></div>
+      </div>
+      <div class="top-controls game-card"><button class="control pause" data-pause>Ⅱ 暂停</button><button class="control speed" data-speed>0.5x ▾</button><button class="control settings">⚙</button><div class="speed-menu game-card" data-speed-menu><button data-set-speed="0.5x">0.5x</button><button data-set-speed="1x">1x</button><button data-set-speed="2x">2x</button></div></div>
+      <div class="map"><div class="hospital">
+        <div class="room reception"><div class="room-label">接待与分诊</div><div class="counter"></div><div class="person staff1"></div><div class="person patient1"></div></div>
+        <div class="room gp"><div class="room-label">全科门诊</div><div class="counter long"></div><div class="person staff1"></div><div class="person patient2"></div></div>
+        <div class="room lab alert-room" id="labRoomCongestion"><div class="room-label">基础化验室</div><div class="machine m1"></div><div class="machine m2"></div><div class="person staff1"></div><div class="queue-line"><i></i><i></i><i></i><i></i><i></i></div><div class="room-alert">!</div><div class="room-kpi"><span>结果积压 <b>4份</b></span><span>人员 <b>1/2</b></span></div></div>
+        <div class="room treatment"><div class="room-label">治疗室</div><div class="bed"></div><div class="person staff2"></div></div>
+        <div class="room pharmacy"><div class="room-label">药房</div><div class="counter long"></div><div class="person staff1"></div></div>
+        <div class="room waiting"><div class="room-label">候诊区</div><div class="chairs"></div><div class="queue-line"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      </div></div>
+      <div class="float-stack">
+        <div class="float-card game-card collapsible collapsed" data-float="goals"><div class="float-head"><span>🎯 今日目标</span><button data-collapse>⌄</button></div><div class="float-body"><div class="goal-row"><div class="goal-line"><span>接诊80名患者</span><b>56/80</b></div><div class="progress"><i style="width:70%"></i></div></div></div></div>
+        <div class="float-card game-card collapsible" data-float="events"><div class="float-head"><span>🕘 事件轨道</span><button data-collapse>⌃</button></div><div class="float-body"><div class="event-primary danger" id="openLabPanel"><div class="row"><span>❗ 化验室拥堵</span><span>01:45</span></div><b>结果发布积压</b></div><div class="event-list"><div class="event-item"><span>10:15</span><div><b>接诊高峰开始</b><br>当前排队 14 人</div></div><div class="event-item"><span>09:40</span><div><b>基础化验室负荷过高</b><br>待处理样本 12 份</div></div></div></div></div>
+      </div>
+      <div class="bottom-toolbar game-card"><button class="tool"><b>🏗️</b>建设</button><button class="tool"><b>👥</b>员工</button><button class="tool"><b>➕</b>科室</button><button class="tool"><b>📋</b>制度</button><button class="tool"><b>💼</b>财务</button><button class="tool"><b>📈</b>报告</button></div>
+      <aside class="context-panel panel-size-m game-card" id="labPanel"><div class="panel-head"><span>❗ 化验室拥堵</span><div class="panel-actions"><button data-panel-size title="调整面板尺寸">↗</button><button data-panel-collapse>‹</button><button class="panel-close" id="closeLab">×</button></div></div><div class="panel-body">
+        <section class="subsection collapsible"><div class="sub-head"><span>化验流程状态</span><button data-sub-collapse>⌃</button></div><div class="sub-content"><div class="flow-row"><div class="flow-stage"><div class="icon">🧪</div><h4>采样</h4><div class="qty">等待 5人</div><span class="cap">工位 1/1</span><div class="stage-bar"><i style="width:72%"></i></div></div><div class="flow-arrow">→</div><div class="flow-stage warn"><div class="icon">⚗️</div><h4>分析</h4><div class="qty">待测 3份</div><span class="cap">分析仪 1/1</span><div class="stage-bar"><i style="width:84%"></i></div></div><div class="flow-arrow">→</div><div class="flow-stage hot"><span class="single-alert">!</span><div class="icon">📋</div><h4>结果发布</h4><div class="qty">积压 4份</div><span class="cap">人员 1/2</span><div class="stage-bar"><i style="width:34%"></i></div></div></div></div></section>
+        <section class="subsection collapsible"><div class="sub-head"><span>排队患者　4人</span><button data-sub-collapse>⌃</button></div><div class="sub-content"><div class="queue-list"><div class="queue-person"><span class="mini-face"></span><span><b>周晴</b>　女 · 28岁</span><span class="wait long">48秒</span></div><div class="queue-person"><span class="mini-face"></span><span><b>李强</b>　男 · 45岁</span><span class="wait">32秒</span></div><div class="queue-person"><span class="mini-face"></span><span><b>王芳</b>　女 · 52岁</span><span class="wait">28秒</span></div><div class="queue-person"><span class="mini-face"></span><span><b>陈晨</b>　男 · 36岁</span><span class="wait">21秒</span></div></div></div></section>
+        <section class="subsection collapsible"><div class="sub-head"><span>应急调度</span><button data-sub-collapse>⌃</button></div><div class="sub-content"><div class="options"><button class="option" data-option="risk"><span class="ico">🛡️</span>风险优先</button><button class="option selected" data-option="support"><span class="ico">👥</span>临时支援</button><button class="option" data-option="outsource"><span class="ico">🚑</span>外送样本</button></div><div class="impact-card"><div class="impact-title" id="impactTitle">临时支援 60秒</div><div class="impact-main" id="impactMain">结果积压 <span class="before">4份</span> → <span class="after">1份</span></div><div class="impact-lines" id="impactLines"><div><b class="green">●</b><span>4名患者更早返回门诊</span></div><div><b class="red">●</b><span>技师疲劳 +15%</span></div><div><b class="orange">▲</b><span>后半班效率可能下降</span></div></div></div><button class="execute" id="executeOption">执行：临时支援</button><div class="panel-links"><button class="link-btn">暂时忽略</button><button class="link-btn">查看排队患者</button><button class="link-btn">查看化验室详情</button></div></div></section>
+      </div></aside>
+    </section>
+
+    <!-- 3 settlement -->
+    <section class="screen settle-screen" id="screen-settlement">
+      <div class="settle-top-date game-card">第8日 · 白班结束</div>
+      <div class="settle-top-metrics game-card"><div class="metric"><div class="metric-icon">💵</div><div><div class="metric-label">现金</div><div class="metric-value green">¥ 268,450</div></div></div></div>
+      <div class="settle-settings game-card">⚙</div>
+      <div class="settle-bg"><div class="hospital"><div class="room reception"><div class="room-label">接待与分诊</div></div><div class="room gp"><div class="room-label">全科门诊</div></div><div class="room lab"><div class="room-label">基础化验室</div></div><div class="room treatment"><div class="room-label">治疗室</div></div><div class="room pharmacy"><div class="room-label">药房</div></div><div class="room waiting"><div class="room-label">候诊区</div></div></div></div>
+      <div class="settlement-card game-card"><h1 class="settle-title">第8日 · 白班结束</h1><div class="sunset"></div>
+        <div class="section-title">医院状态</div>
+        <div class="hospital-stats"><div class="h-stat"><span>医院声誉</span><b class="green">良好 ↑</b></div><div class="h-stat"><span>员工状态</span><b style="color:#6d43d6">少数疲劳</b></div><div class="h-stat"><span>接诊</span><b>36人</b></div><div class="h-stat"><span>出院</span><b>31人</b></div><div class="h-stat"><span>治疗中</span><b>3人</b></div><div class="h-stat"><span>转院</span><b>2人</b></div><div class="h-stat"><span>本日收入</span><b class="green">12,480</b></div></div>
+        <div class="section-title">科室状态</div>
+        <div class="department-grid"><button class="dept-card" data-dept="reception"><h4>👨‍💼 接待与分诊</h4><div class="dept-status"><span class="status-dot"></span>平稳</div></button><button class="dept-card" data-dept="gp"><h4>🩺 全科门诊</h4><div class="dept-status" style="color:#df6d16"><span class="status-dot orange"></span>繁忙</div></button><button class="dept-card" data-dept="lab"><h4>🧪 基础化验室</h4><div class="dept-status"><span class="status-dot blue"></span>已缓解</div></button><button class="dept-card" data-dept="treatment"><h4>🛏️ 治疗室</h4><div class="dept-status"><span class="status-dot"></span>平稳</div></button><button class="dept-card" data-dept="pharmacy"><h4>💊 药房</h4><div class="dept-status"><span class="status-dot"></span>平稳</div></button><button class="dept-card" data-dept="waiting"><h4>👥 候诊区</h4><div class="dept-status" style="color:#df6d16"><span class="status-dot orange"></span>略拥挤</div></button></div>
+        <div class="dept-detail" id="deptDetail"></div>
+        <div class="settle-actions"><button class="secondary" id="viewPatients">查看本班患者</button><button class="primary" id="nextShiftButton">安排下一日</button></div>
+      </div>
+    </section>
+
+    <div class="toast" id="toast"></div>
+  </div></div>
+</div>
+<script>
+(function(){
+  const stage=document.getElementById('stage'), viewport=document.getElementById('viewport');
+  let device='tablet';
+  document.querySelectorAll('.bottom-toolbar').forEach(toolbar=>{
+    if(toolbar.querySelector('.phone-more')) return;
+    const more=document.createElement('button');
+    more.className='tool phone-more';
+    more.innerHTML='<b>•••</b>更多';
+    more.addEventListener('click',()=>toast('手机端：财务与报告收进“更多”'));
+    toolbar.appendChild(more);
+  });
+  function syncPanelModes(){
+    document.querySelectorAll('.context-panel').forEach(panel=>{
+      panel.classList.remove('mobile-full','mobile-sheet','mobile-overlay','mobile-overlay-large','mobile-sheet-large');
+      if(device==='phone'){
+        const operational = panel.id==='labPanel';
+        panel.classList.add(operational?'mobile-overlay':'mobile-sheet');
+        const collapseBtn=panel.querySelector('[data-panel-collapse]');
+        if(collapseBtn) collapseBtn.textContent=panel.classList.contains('collapsed')?'›':'‹';
+        const sizeBtn=panel.querySelector('[data-panel-size]');
+        if(sizeBtn) sizeBtn.textContent='↗';
+      }else{
+        const sizeBtn=panel.querySelector('[data-panel-size]');
+        if(sizeBtn) sizeBtn.textContent='↗';
+      }
+    });
+  }
+  function fit(){
+    const w=device==='phone'?1440:1600, h=device==='phone'?720:900;
+    const s=Math.min(viewport.clientWidth/w,viewport.clientHeight/h);
+    stage.style.transform=`scale(${s})`;
+    stage.style.left=((viewport.clientWidth-w*s)/2)+'px';
+    stage.style.top=((viewport.clientHeight-h*s)/2)+'px';
+  }
+  addEventListener('resize',fit);fit();
+  const screenNames=['main','congestion','settlement'];
+  function show(name){screenNames.forEach(n=>document.getElementById('screen-'+n).classList.toggle('active',n===name));document.querySelectorAll('[data-screen]').forEach(b=>b.classList.toggle('active',b.dataset.screen===name));syncPanelModes();}
+  document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.screen)));
+  document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.goto)));
+
+  document.querySelectorAll('[data-collapse]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const card=btn.closest('.float-card');card.classList.toggle('collapsed');btn.textContent=card.classList.contains('collapsed')?'⌄':'⌃';}));
+  document.querySelectorAll('[data-sub-collapse]').forEach(btn=>btn.addEventListener('click',()=>{const sec=btn.closest('.subsection');sec.classList.toggle('collapsed');btn.textContent=sec.classList.contains('collapsed')?'⌄':'⌃';}));
+  document.querySelectorAll('[data-panel-collapse]').forEach(btn=>btn.addEventListener('click',()=>{const panel=btn.closest('.context-panel');panel.classList.toggle('collapsed');btn.textContent=panel.classList.contains('collapsed')?'›':'‹';}));
+  document.querySelectorAll('[data-panel-size]').forEach(btn=>btn.addEventListener('click',()=>{
+    const panel=btn.closest('.context-panel');
+    if(device==='phone'){
+      if(panel.classList.contains('mobile-overlay')){
+        const large=panel.classList.toggle('mobile-overlay-large');
+        btn.textContent=large?'↙':'↗';
+      }else{
+        const large=panel.classList.toggle('mobile-sheet-large');
+        btn.textContent=large?'↙':'↗';
+      }
+      return;
+    }
+    const sizes=['panel-size-s','panel-size-m','panel-size-l'];
+    let i=sizes.findIndex(s=>panel.classList.contains(s));
+    panel.classList.remove(...sizes);panel.classList.add(sizes[(i+1)%sizes.length]);
+    btn.textContent=sizes[(i+1)%sizes.length]==='panel-size-l'?'↙':'↗';
+  }));
+  document.querySelectorAll('[data-hide-panel]').forEach(btn=>btn.addEventListener('click',()=>btn.closest('.context-panel').classList.add('hidden')));
+
+  const patientPanel=document.getElementById('patientPanel');
+  document.getElementById('patientZhou').addEventListener('click',e=>{e.stopPropagation();patientPanel.classList.remove('hidden','collapsed');syncPanelModes();});
+  document.getElementById('closePatient').addEventListener('click',()=>patientPanel.classList.add('hidden'));
+  document.getElementById('eventWarning').addEventListener('click',()=>show('congestion'));
+  document.getElementById('labRoomMain').addEventListener('click',()=>show('congestion'));
+
+  const labPanel=document.getElementById('labPanel');
+  function openLab(){labPanel.classList.remove('hidden','collapsed');syncPanelModes();}
+  document.getElementById('closeLab').addEventListener('click',()=>labPanel.classList.add('hidden'));
+  document.getElementById('openLabPanel').addEventListener('click',openLab);
+  document.getElementById('labRoomCongestion').addEventListener('click',openLab);
+
+  document.querySelectorAll('[data-speed]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const menu=btn.parentElement.querySelector('[data-speed-menu]');document.querySelectorAll('[data-speed-menu]').forEach(m=>{if(m!==menu)m.classList.remove('open')});menu.classList.toggle('open');}));
+  document.querySelectorAll('[data-set-speed]').forEach(btn=>btn.addEventListener('click',()=>{const controls=btn.closest('.top-controls');controls.querySelector('[data-speed]').textContent=btn.dataset.setSpeed+' ▾';controls.querySelector('[data-speed-menu]').classList.remove('open');}));
+  document.querySelectorAll('[data-pause]').forEach(btn=>btn.addEventListener('click',()=>{btn.classList.toggle('active');btn.textContent=btn.classList.contains('active')?'▶ 继续':'Ⅱ 暂停';}));
+  document.addEventListener('click',()=>document.querySelectorAll('[data-speed-menu]').forEach(m=>m.classList.remove('open')));
+
+  const optionData={
+    risk:{title:'风险优先',main:'高风险队列 <span class="before">2人</span> → <span class="after">0人</span>',lines:['高风险患者先返回门诊','普通患者等待增加','不增加员工疲劳'],button:'执行：风险优先'},
+    support:{title:'临时支援 60秒',main:'结果积压 <span class="before">4份</span> → <span class="after">1份</span>',lines:['4名患者更早返回门诊','技师疲劳 +15%','后半班效率可能下降'],button:'执行：临时支援'},
+    outsource:{title:'外送 3份样本',main:'本院待处理 <span class="before">7份</span> → <span class="after">4份</span>',lines:['立即释放本院容量','额外成本 360','外送结果返回更慢'],button:'执行：外送样本'}
+  };
+  let selected='support';
+  document.querySelectorAll('.option').forEach(btn=>btn.addEventListener('click',()=>{selected=btn.dataset.option;document.querySelectorAll('.option').forEach(x=>x.classList.toggle('selected',x===btn));const d=optionData[selected];document.getElementById('impactTitle').textContent=d.title;document.getElementById('impactMain').innerHTML=d.main;document.getElementById('impactLines').innerHTML=d.lines.map((x,i)=>`<div><b class="${i===0?'green':i===1?'red':'orange'}">${i===2?'▲':'●'}</b><span>${x}</span></div>`).join('');document.getElementById('executeOption').textContent=d.button;}));
+  document.getElementById('executeOption').addEventListener('click',()=>{const btn=document.getElementById('executeOption');btn.textContent='已提交：'+optionData[selected].title;btn.disabled=true;toast('调度命令已提交');});
+
+  const deptData={
+    reception:[['最高排队','6人'],['平均等待','18秒'],['员工覆盖','2/2'],['本班状态','平稳']],
+    gp:[['最高排队','9人'],['复诊回流','4人'],['医生覆盖','2/2'],['本班状态','繁忙']],
+    lab:[['最高结果积压','4份'],['临时支援','60秒'],['结束积压','1份'],['技师疲劳','+15%']],
+    treatment:[['完成治疗','18次'],['最高占用','1/1'],['清洁延迟','0次'],['本班状态','平稳']],
+    pharmacy:[['完成处方','21份'],['缺货','0次'],['最高排队','3人'],['本班状态','平稳']],
+    waiting:[['最高人数','14人'],['平均等待','26秒'],['离开人数','0人'],['本班状态','略拥挤']]
+  };
+  const detail=document.getElementById('deptDetail');
+  document.querySelectorAll('[data-dept]').forEach(btn=>btn.addEventListener('click',()=>{const id=btn.dataset.dept;const already=btn.classList.contains('selected');document.querySelectorAll('[data-dept]').forEach(x=>x.classList.remove('selected'));if(already){detail.classList.remove('open');detail.innerHTML='';return;}btn.classList.add('selected');detail.innerHTML=deptData[id].map(([k,v])=>`<div class="detail-kpi"><span>${k}</span><b>${v}</b></div>`).join('');detail.classList.add('open');}));
+
+  let nightUnlocked=false;
+  const nightBtn=document.getElementById('nightToggle'), nextBtn=document.getElementById('nextShiftButton');
+  nightBtn.addEventListener('click',()=>{nightUnlocked=!nightUnlocked;nightBtn.textContent=nightUnlocked?'已解锁':'未解锁';nightBtn.classList.toggle('active',nightUnlocked);nextBtn.textContent=nightUnlocked?'开始晚班':'安排下一日';});
+  document.getElementById('viewPatients').addEventListener('click',()=>toast('本班患者列表已打开（原型占位）'));
+  nextBtn.addEventListener('click',()=>toast(nightUnlocked?'准备进入晚班':'已进入下一日安排'));
+
+  document.getElementById('tabletMode').addEventListener('click',()=>setDevice('tablet'));
+  document.getElementById('phoneMode').addEventListener('click',()=>setDevice('phone'));
+  function setDevice(mode){device=mode;stage.classList.toggle('phone',mode==='phone');document.getElementById('tabletMode').classList.toggle('active',mode==='tablet');document.getElementById('phoneMode').classList.toggle('active',mode==='phone');document.querySelectorAll('.context-panel').forEach(p=>p.classList.remove('collapsed','mobile-overlay-large','mobile-sheet-large'));if(mode==='phone'){document.querySelectorAll('.float-card').forEach(c=>{c.classList.add('collapsed');const b=c.querySelector('[data-collapse]');if(b)b.textContent='⌄';});}syncPanelModes();fit();}
+  function toast(text){const el=document.getElementById('toast');el.textContent=text;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),1200);}
+  syncPanelModes();
+})();
+</script>
+</body>
+</html>
