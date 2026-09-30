@@ -1,2 +1,6 @@
 
 .DS_Store
+**/bin/
+**/obj/
+.workbuddy/
+Codex 图像*.png
