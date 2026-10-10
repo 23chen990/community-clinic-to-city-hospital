@@ -1,8 +1,13 @@
 using Game.Simulation.Demo;
+using Game.Simulation;
 
-if (args.Any(argument => argument == "--vertical"))
+if (args.Any(argument => argument == "--play"))
 {
-    HospitalVerticalSliceSession.Run(Console.In, Console.Out);
+    M1SimulationSession.Run(Console.In, Console.Out, M1PlayScenarios.CreateFirstWhiteShift());
+}
+else if (args.Any(argument => argument == "--vertical"))
+{
+    M1SimulationSession.Run(Console.In, Console.Out);
 }
 else
 {

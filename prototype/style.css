@@ -1,0 +1,201 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: #0f1620;
+  font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #203142;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* 横屏引导 */
+#rotate-hint {
+  display: none;
+  position: fixed; inset: 0;
+  background: #1a2638;
+  color: #fff;
+  align-items: center; justify-content: center;
+  z-index: 100;
+}
+#rotate-hint.show { display: flex; }
+.rh-box { font-size: 22px; padding: 24px 36px; background: #2a3a52; border-radius: 14px; }
+
+/* 配置校验失败时的显式中止页（绝不以空白或 NaN 假装正常） */
+#boot-error {
+  padding: 28px 32px; color: #7a1f1f; background: #fff2f2;
+  height: 100%; overflow: auto; font-size: 15px; line-height: 1.7;
+}
+#boot-error h1 { font-size: 20px; margin-bottom: 10px; }
+#boot-error ul { margin: 10px 0 0 22px; }
+#boot-error li { font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+
+/* 整体布局：横屏 flex */
+#game-root {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  background: #eef3f6;
+  min-height: 0;
+}
+
+/* HUD */
+#hud {
+  flex: 0 0 auto;
+  min-height: 44px;
+  background: linear-gradient(180deg, #135f68, #0e4a52);
+  color: #fff;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+  padding: 4px 12px;
+  padding-top: calc(4px + env(safe-area-inset-top, 0px));
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  z-index: 10;
+}
+.hud-left, .hud-right { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.hud-title { font-size: 15px; opacity: .85; font-weight: 600; white-space: nowrap; }
+.hud-item { font-size: 12px; background: rgba(255,255,255,.12); padding: 4px 8px; border-radius: 7px; white-space: nowrap; }
+.hud-item b { color: #ffe27a; font-size: 14px; }
+#hud-save.bad { background: rgba(220,80,80,.55); }
+#hud-save.bad b { color: #ffd9d9; }
+.hud-btn {
+  background: rgba(255,255,255,.15); color: #fff;
+  border: none; border-radius: 7px; padding: 6px 9px;
+  font-size: 12px; cursor: pointer; transition: background .15s; white-space: nowrap;
+}
+.hud-btn:hover { background: rgba(255,255,255,.28); }
+.hud-btn.danger { background: rgba(220,80,80,.5); }
+.hud-btn.danger:hover { background: rgba(220,80,80,.8); }
+
+/* 主舞台：canvas 区 + 面板占位，两者都是 flex 兄弟，互不挤出视口 */
+#stage {
+  flex: 1 1 auto;
+  min-height: 0; min-width: 0;
+  position: relative;
+  background: #d8e3ea;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+#stage-view {
+  flex: 1 1 auto;
+  min-width: 0; min-height: 0;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+#canvas {
+  flex: 0 0 auto;
+  display: block;
+  /* 尺寸由 JS 按 1280×720 等比 contain 计算，CSS 不再拉伸它 */
+  background: #c8d8e2;
+}
+
+/* 房间面板：宽度受限，绝不超出视口 */
+#room-panel {
+  flex: 0 0 clamp(0px, 26vw, 320px);
+  width: clamp(0px, 26vw, 320px);
+  max-width: 320px;
+  background: #fff;
+  border-left: 1px solid #cdd8e0;
+  box-shadow: -3px 0 12px rgba(0,0,0,.08);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 5;
+}
+#room-panel.hidden { display: none; }
+.rp-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border-bottom: 2px solid #e3ebf1;
+  background: #f4f8fb;
+  position: sticky; top: 0; z-index: 2;
+}
+#rp-title { font-size: 17px; font-weight: 700; color: #135f68; }
+.rp-close {
+  background: none; border: none; font-size: 26px; color: #7a8a99;
+  cursor: pointer; line-height: 1; padding: 0 6px;
+  flex: 0 0 auto;
+}
+.rp-close:hover { color: #d04040; }
+#rp-body { padding: 12px 14px 20px; }
+
+.rp-desc { color: #5a6b7c; font-size: 13px; margin-bottom: 12px; line-height: 1.6; }
+.rp-stat {
+  display: flex; justify-content: space-between; gap: 8px;
+  padding: 7px 0; border-bottom: 1px solid #eef3f6; font-size: 13px;
+}
+.rp-stat b { color: #135f68; }
+.rp-section-title {
+  font-size: 12px; color: #7a8a99; margin: 14px 0 8px;
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.rp-btn {
+  display: block; width: 100%;
+  background: #1a8a9e; color: #fff; border: none;
+  border-radius: 10px; padding: 12px; margin-top: 10px;
+  font-size: 14px; cursor: pointer; text-align: left;
+  transition: background .15s, transform .05s;
+}
+.rp-btn:hover:not(:disabled) { background: #146e80; }
+.rp-btn:active:not(:disabled) { transform: scale(.98); }
+.rp-btn:disabled { background: #aab8c4; cursor: not-allowed; }
+.rp-btn .rp-btn-title { font-weight: 700; font-size: 15px; display: block; }
+.rp-btn .rp-btn-sub { font-size: 11.5px; opacity: .92; display: block; margin-top: 3px; line-height: 1.4; }
+.rp-btn.unlock { background: #d97706; }
+.rp-btn.unlock:hover:not(:disabled) { background: #b5630a; }
+
+.rp-locked-msg { color: #888; font-size: 12.5px; padding: 12px; background: #f4f6f8; border-radius: 8px; line-height: 1.5; }
+.rp-note { color: #98a6b2; font-size: 11.5px; margin-top: 14px; line-height: 1.5; }
+
+/* 底部任务条 */
+#taskbar {
+  flex: 0 0 auto;
+  background: #1a2638;
+  color: #cdd8e0;
+  padding: 6px 12px;
+  padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+  font-size: 11.5px;
+  display: flex; gap: 12px; overflow-x: auto;
+  white-space: nowrap;
+}
+#task-list { display: flex; gap: 12px; }
+.task-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px; border-radius: 12px;
+  background: rgba(255,255,255,.08);
+}
+.task-chip.done { background: rgba(80,200,120,.25); color: #8fe6a8; }
+.task-chip .t-reward { color: #ffe27a; font-size: 10.5px; }
+
+/* Toast */
+#toast {
+  position: fixed; left: 50%; bottom: 72px;
+  transform: translateX(-50%);
+  max-width: min(560px, 88vw);
+  text-align: center;
+  background: rgba(20,30,45,.92); color: #fff;
+  padding: 10px 18px; border-radius: 10px;
+  font-size: 13px; z-index: 50;
+  transition: opacity .25s;
+  pointer-events: none;
+}
+#toast.hidden { opacity: 0; }
+#toast.ok { background: rgba(30,120,70,.92); }
+#toast.err { background: rgba(180,50,50,.92); }
+
+/* 窄横屏：收起标题、压缩 HUD，保证面板与按钮完整可见 */
+@media (max-width: 900px) {
+  .hud-title { display: none; }
+}
+@media (max-width: 740px) {
+  #hud { padding: 4px 8px; gap: 5px; }
+  .hud-left, .hud-right { gap: 5px; }
+  .hud-item { font-size: 11px; padding: 3px 6px; }
+  .hud-item b { font-size: 12.5px; }
+  .hud-btn { font-size: 11px; padding: 5px 7px; }
+  #room-panel { width: clamp(0px, 30vw, 320px); flex-basis: clamp(0px, 30vw, 320px); }
+}
+@media (max-width: 620px) {
+  .hud-item { font-size: 10px; padding: 3px 5px; }
+  .hud-btn { font-size: 10px; padding: 4px 6px; }
+}

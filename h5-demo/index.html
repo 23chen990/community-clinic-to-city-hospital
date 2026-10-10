@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#edf3f5">
+  <title>白班经营 · 社区诊所</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">＋</span><span><b>青禾社区诊所</b><small>白班 · 第 1 日</small></span></div>
+      <div class="status-strip"><div><small>时间</small><b id="clock">08:00</b></div><i></i><div><small>今日接诊</small><b><span id="arrived">0</span><em> / 5</em></b></div><i></i><div><small>已离院</small><b id="discharged">0</b></div></div>
+      <div class="controls"><button class="icon-btn" id="pauseBtn" aria-label="暂停">Ⅱ</button><button class="speed-btn active" data-speed="1">1×</button><button class="speed-btn" data-speed="2">2×</button></div>
+    </header>
+    <section class="map-wrap" aria-label="诊所运营地图">
+      <div class="map-grid"></div>
+      <div class="map-caption"><span class="live-dot"></span>诊所运营中 <span id="statusText">患者正在按流程就诊</span></div>
+      <div class="goal-float" id="goalFloat"><button class="float-head" id="goalToggle"><span>今日目标</span><span id="goalChevron">⌄</span></button><div class="goal-body" id="goalBody"><p><span class="goal-check" id="goalCheck">○</span>完成今日接诊 <b><span id="goalCount">0</span>/5</b></p><p><span class="goal-check" id="labCheck">○</span>处理化验结果 <b><span id="labDone">0</span>/4</b></p></div></div>
+      <div class="clinic-map">
+        <div class="room room-waiting"><span class="room-icon">◉</span><b>候诊区</b><div class="room-people" id="waitingPeople"></div><small id="waitingCount">等待 0 人</small></div>
+        <div class="room room-triage"><span class="room-icon">✚</span><b>接待 / 分诊</b><div class="room-people" id="triagePeople"></div><small id="triageCount">空闲</small></div>
+        <div class="room room-gp"><span class="room-icon">⌕</span><b>全科门诊</b><div class="room-people" id="gpPeople"></div><small id="gpCount">空闲</small></div>
+        <button class="room room-lab" id="labRoom"><span class="lab-icon">⚗</span><b>基础化验室</b><span class="lab-alert" id="labAlert">结果积压 <b id="backlog">0</b></span><small>采样 · 分析 · 结果发布</small></button>
+        <div class="room room-care"><span class="room-icon">♡</span><b>治疗室</b><div class="room-people" id="carePeople"></div><small id="careCount">空闲</small></div>
+        <div class="room room-pharmacy"><span class="room-icon">▧</span><b>药房</b><div class="room-people" id="pharmacyPeople"></div><small id="pharmacyCount">空闲</small></div>
+        <div class="corridor corridor-a"></div><div class="corridor corridor-b"></div><div class="corridor corridor-c"></div>
+        <div class="entrance"><span>⇢</span><small>入口</small></div><div class="exit"><span>↗</span><small>离院</small></div>
+      </div>
+      <div class="event-float"><div class="event-title"><span>最近动态</span><span class="live-dot"></span></div><div id="eventList" class="event-list"><p>诊所准备接诊</p></div></div>
+      <button class="fab-lab" id="openLab"><span>⚗</span><span>化验室</span><b id="fabBacklog">0</b></button>
+    </section>
+    <footer class="bottombar"><div class="staff"><span class="staff-avatar">林</span><span><b>林医生</b><small>全科 · <i class="staff-state" id="doctorState">待命</i></small></span><span class="staff-avatar nurse">周</span><span><b>周护士</b><small>接诊 · <i class="staff-state" id="nurseState">待命</i></small></span></div><div class="footer-note"><span class="legend-dot mint"></span>流程自动运行 <span class="footer-divider">·</span>点击科室查看状态</div><button class="settle-btn" id="settleBtn" disabled>班次进行中 <span>→</span></button></footer>
+    <div class="scrim" id="scrim"></div>
+    <aside class="lab-panel" id="labPanel" aria-label="化验室调度">
+      <div class="panel-grab"></div><div class="panel-head"><div><small class="eyebrow">科室状态 · 检验</small><h1>基础化验室</h1></div><button class="close-btn" id="closeLab" aria-label="关闭">×</button></div>
+      <div class="bottleneck"><span class="bottleneck-icon">↗</span><span><small>当前瓶颈</small><b id="bottleneck">结果发布</b></span><span class="bottleneck-value"><b id="bottleneckCount">0</b><small>份积压</small></span></div>
+      <div class="queue-row"><div class="queue-card"><span>01 · 前处理</span><b>采样</b><strong id="samplingQueue">0 <small>人</small></strong><div class="queue-track"><i id="samplingBar"></i></div></div><div class="queue-arrow">→</div><div class="queue-card"><span>02 · 检测</span><b>分析</b><strong id="analysisQueue">0 <small>份</small></strong><div class="queue-track"><i id="analysisBar"></i></div></div><div class="queue-arrow">→</div><div class="queue-card result-card"><span>03 · 发布</span><b>结果</b><strong id="resultQueue">0 <small>份</small></strong><div class="queue-track"><i id="resultBar"></i></div></div></div>
+      <div class="list-heading"><b>排队患者</b><span id="patientQueueCount">0 人</span></div><div id="labPatients" class="lab-patients"><div class="empty-queue">暂时没有排队患者</div></div>
+      <div class="staff-fatigue"><span>检验人员疲劳</span><div class="fatigue-track"><i id="fatigueBar"></i></div><b id="fatigue">0%</b></div>
+      <div class="dispatch-heading"><b>临时调度</b><small>选择一种方式处理当前积压</small></div>
+      <div class="dispatch-options" id="dispatchOptions">
+        <button class="dispatch-option" data-plan="risk-priority"><span class="option-icon blue">↑</span><span><b>风险优先</b><small>高风险结果先发布</small></span></button>
+        <button class="dispatch-option selected" data-plan="temporary-support"><span class="option-icon amber">＋</span><span><b>临时支援</b><small>60 秒内加快结果发布</small></span></button>
+        <button class="dispatch-option" data-plan="outsource"><span class="option-icon violet">⇢</span><span><b>外送样本</b><small>普通样本转外部检验</small></span></button>
+      </div>
+      <div class="dispatch-impact" id="dispatchImpact"><span class="impact-mark">✦</span><span><b>预计 60 秒内发布 3 份结果</b><small>检验人员疲劳 +15%</small></span></div>
+      <button class="execute-btn" id="executeBtn">执行临时支援 <span>→</span></button>
+      <p class="panel-footnote">调度后将返回运营地图，科室与队列状态会持续更新。</p>
+    </aside>
+    <div class="settlement" id="settlement"><div class="settlement-card"><span class="settlement-mark">✦</span><small>白班结束 · 第 1 日</small><h2>今天的诊疗已完成</h2><p>每位患者都已完成治疗并离院。</p><div class="settlement-stats"><div><small>接诊患者</small><b>5 <em>人</em></b></div><div><small>完成化验</small><b><span id="settledLabs">4</span> <em>份</em></b></div><div><small>今日收入</small><b>¥<span id="revenue">0</span></b></div></div><div class="settlement-depts"><div><span>全科门诊</span><b>已完成</b></div><div><span>基础化验</span><b>已完成</b></div><div><span>治疗与药房</span><b>已完成</b></div></div><button id="settlementClose" class="execute-btn">返回诊所地图 <span>→</span></button></div></div>
+  </main>
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>

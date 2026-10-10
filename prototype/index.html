@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>晴天小医院 · A 区候选 v0.2.0</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23135f68'/%3E%3Cpath d='M14 7h4v7h7v4h-7v7h-4v-7H7v-4h7z' fill='%23ffffff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 横屏引导（仅竖屏时显示） -->
+  <div id="rotate-hint">
+    <div class="rh-box">请将手机横屏放置 🔄</div>
+  </div>
+
+  <div id="game-root">
+    <!-- 顶部 HUD -->
+    <header id="hud">
+      <div class="hud-left">
+        <div class="hud-item" id="hud-coins">金币 <b>0</b></div>
+        <div class="hud-item" id="hud-patients">在院 <b>0</b></div>
+        <div class="hud-item" id="hud-completed">已治愈 <b>0</b></div>
+      </div>
+      <div class="hud-title">晴天小医院 · A区原型</div>
+      <div class="hud-right">
+        <div class="hud-item" id="hud-save">存档 <b id="hud-save-value">正常</b></div>
+        <button id="btn-pause" class="hud-btn">⏸ 暂停</button>
+        <button id="btn-speed" class="hud-btn">1×</button>
+        <button id="btn-save"  class="hud-btn">💾 存档</button>
+        <button id="btn-reset" class="hud-btn danger">重置</button>
+      </div>
+    </header>
+
+    <!-- 主场景：Canvas 医院地图 + 右侧房间面板 -->
+    <main id="stage">
+      <!-- stage-view 只负责给 canvas 提供等比 contain 的可用空间，
+           面板作为同层 flex 兄弟占位，永远不会把 canvas 挤出视口 -->
+      <div id="stage-view">
+        <canvas id="canvas" width="1280" height="720"></canvas>
+      </div>
+
+      <!-- 右侧房间信息面板（点击房间后出现；打开时暂停模拟） -->
+      <aside id="room-panel" class="hidden">
+        <div class="rp-header">
+          <span id="rp-title">科室</span>
+          <button id="rp-close" class="rp-close" aria-label="关闭">×</button>
+        </div>
+        <div id="rp-body"></div>
+      </aside>
+    </main>
+
+    <!-- 底部任务条 -->
+    <footer id="taskbar">
+      <div id="task-list"></div>
+    </footer>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="hidden"></div>
+
+  <script src="config.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

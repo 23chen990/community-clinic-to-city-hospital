@@ -1,0 +1,898 @@
+{
+  "generatedAt": "2026-10-02T17:54:24.952Z",
+  "before": [
+    {
+      "viewport": "1280x720",
+      "main": {
+        "innerW": 1280,
+        "innerH": 720,
+        "docScrollW": 1280,
+        "docClientW": 1280,
+        "overflowX": 0,
+        "bodyScrollW": 1280,
+        "panelVisible": false,
+        "panelRight": 0,
+        "panelLeft": 0,
+        "panelW": 0,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 56,
+        "canvasW": 1280,
+        "canvasH": 648,
+        "canvasBottom": 704,
+        "canvasAspect": 1.9753,
+        "canvasOverflowBottom": 0,
+        "scale": null,
+        "canvasScale": 1,
+        "titleCssPx": null,
+        "titleCssPxFromCanvas": 22,
+        "bodyCssPx": null,
+        "patientCssPx": null,
+        "patientCssPxFromCanvas": 16,
+        "closeBtnRect": null,
+        "unlockBtnRect": null,
+        "hudScrollW": 1280,
+        "hudClientW": 1280
+      },
+      "panel": {
+        "innerW": 1280,
+        "innerH": 720,
+        "docScrollW": 1280,
+        "docClientW": 1280,
+        "overflowX": 0,
+        "bodyScrollW": 1280,
+        "panelVisible": true,
+        "panelRight": 1472,
+        "panelLeft": 1152,
+        "panelW": 320,
+        "panelOverflowRight": 192,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 56,
+        "canvasW": 1152,
+        "canvasH": 648,
+        "canvasBottom": 704,
+        "canvasAspect": 1.7778,
+        "canvasOverflowBottom": 0,
+        "scale": null,
+        "canvasScale": 0.9,
+        "titleCssPx": null,
+        "titleCssPxFromCanvas": 19.8,
+        "bodyCssPx": null,
+        "patientCssPx": null,
+        "patientCssPxFromCanvas": 14.4,
+        "closeBtnRect": {
+          "x": 1438.8125,
+          "y": 72,
+          "right": 1454,
+          "bottom": 98,
+          "inView": false
+        },
+        "unlockBtnRect": {
+          "right": 1454,
+          "bottom": 465.796875,
+          "w": 283,
+          "inView": false
+        },
+        "hudScrollW": 1280,
+        "hudClientW": 1280
+      },
+      "locked": {
+        "innerW": 1280,
+        "innerH": 720,
+        "docScrollW": 1280,
+        "docClientW": 1280,
+        "overflowX": 0,
+        "bodyScrollW": 1280,
+        "panelVisible": true,
+        "panelRight": 1472,
+        "panelLeft": 1152,
+        "panelW": 320,
+        "panelOverflowRight": 192,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 56,
+        "canvasW": 1152,
+        "canvasH": 648,
+        "canvasBottom": 704,
+        "canvasAspect": 1.7778,
+        "canvasOverflowBottom": 0,
+        "scale": null,
+        "canvasScale": 0.9,
+        "titleCssPx": null,
+        "titleCssPxFromCanvas": 19.8,
+        "bodyCssPx": null,
+        "patientCssPx": null,
+        "patientCssPxFromCanvas": 14.4,
+        "closeBtnRect": {
+          "x": 1438.8125,
+          "y": 72,
+          "right": 1454,
+          "bottom": 98,
+          "inView": false
+        },
+        "unlockBtnRect": {
+          "right": 1454,
+          "bottom": 266.796875,
+          "w": 283,
+          "inView": false
+        },
+        "hudScrollW": 1280,
+        "hudClientW": 1280
+      },
+      "expanded": null,
+      "errs": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "shots": {
+        "main": "reports/a_zone_candidate_v0_2/shots/landscape_1280x720_before_main.png",
+        "panel": "reports/a_zone_candidate_v0_2/shots/landscape_1280x720_before_panel.png",
+        "locked": "reports/a_zone_candidate_v0_2/shots/landscape_1280x720_before_locked.png",
+        "expanded": null
+      }
+    },
+    {
+      "viewport": "844x390",
+      "main": {
+        "innerW": 844,
+        "innerH": 390,
+        "docScrollW": 844,
+        "docClientW": 844,
+        "overflowX": 0,
+        "bodyScrollW": 844,
+        "panelVisible": false,
+        "panelRight": 0,
+        "panelLeft": 0,
+        "panelW": 0,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 56,
+        "canvasW": 844,
+        "canvasH": 318,
+        "canvasBottom": 374,
+        "canvasAspect": 2.6541,
+        "canvasOverflowBottom": 0,
+        "scale": null,
+        "canvasScale": 0.659375,
+        "titleCssPx": null,
+        "titleCssPxFromCanvas": 14.506250000000001,
+        "bodyCssPx": null,
+        "patientCssPx": null,
+        "patientCssPxFromCanvas": 10.55,
+        "closeBtnRect": null,
+        "unlockBtnRect": null,
+        "hudScrollW": 844,
+        "hudClientW": 844
+      },
+      "panel": {
+        "innerW": 844,
+        "innerH": 390,
+        "docScrollW": 844,
+        "docClientW": 844,
+        "overflowX": 0,
+        "bodyScrollW": 844,
+        "panelVisible": true,
+        "panelRight": 885,
+        "panelLeft": 565,
+        "panelW": 320,
+        "panelOverflowRight": 41,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 56,
+        "canvasW": 565,
+        "canvasH": 318,
+        "canvasBottom": 374,
+        "canvasAspect": 1.7767,
+        "canvasOverflowBottom": 0,
+        "scale": null,
+        "canvasScale": 0.44140625,
+        "titleCssPx": null,
+        "titleCssPxFromCanvas": 9.7109375,
+        "bodyCssPx": null,
+        "patientCssPx": null,
+        "patientCssPxFromCanvas": 7.0625,
+        "closeBtnRect": {
+          "x": 851.8125,
+          "y": 72,
+          "right": 867,
+          "bottom": 98,
+          "inView": false
+        },
+        "unlockBtnRect": {
+          "right": 867,
+          "bottom": 465.796875,
+          "w": 283,
+          "inView": false
+        },
+        "hudScrollW": 844,
+        "hudClientW": 844
+      },
+      "locked": {
+        "innerW": 844,
+        "innerH": 390,
+        "docScrollW": 844,
+        "docClientW": 844,
+        "overflowX": 0,
+        "bodyScrollW": 844,
+        "panelVisible": true,
+        "panelRight": 885,
+        "panelLeft": 565,
+        "panelW": 320,
+        "panelOverflowRight": 41,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 56,
+        "canvasW": 565,
+        "canvasH": 318,
+        "canvasBottom": 374,
+        "canvasAspect": 1.7767,
+        "canvasOverflowBottom": 0,
+        "scale": null,
+        "canvasScale": 0.44140625,
+        "titleCssPx": null,
+        "titleCssPxFromCanvas": 9.7109375,
+        "bodyCssPx": null,
+        "patientCssPx": null,
+        "patientCssPxFromCanvas": 7.0625,
+        "closeBtnRect": {
+          "x": 851.8125,
+          "y": 72,
+          "right": 867,
+          "bottom": 98,
+          "inView": false
+        },
+        "unlockBtnRect": {
+          "right": 867,
+          "bottom": 266.796875,
+          "w": 283,
+          "inView": false
+        },
+        "hudScrollW": 844,
+        "hudClientW": 844
+      },
+      "expanded": null,
+      "errs": [],
+      "shots": {
+        "main": "reports/a_zone_candidate_v0_2/shots/landscape_844x390_before_main.png",
+        "panel": "reports/a_zone_candidate_v0_2/shots/landscape_844x390_before_panel.png",
+        "locked": "reports/a_zone_candidate_v0_2/shots/landscape_844x390_before_locked.png",
+        "expanded": null
+      }
+    },
+    {
+      "viewport": "667x375",
+      "main": {
+        "innerW": 667,
+        "innerH": 375,
+        "docScrollW": 667,
+        "docClientW": 667,
+        "overflowX": 0,
+        "bodyScrollW": 667,
+        "panelVisible": false,
+        "panelRight": 0,
+        "panelLeft": 0,
+        "panelW": 0,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 56,
+        "canvasW": 667,
+        "canvasH": 303,
+        "canvasBottom": 359,
+        "canvasAspect": 2.2013,
+        "canvasOverflowBottom": 0,
+        "scale": null,
+        "canvasScale": 0.52109375,
+        "titleCssPx": null,
+        "titleCssPxFromCanvas": 11.4640625,
+        "bodyCssPx": null,
+        "patientCssPx": null,
+        "patientCssPxFromCanvas": 8.3375,
+        "closeBtnRect": null,
+        "unlockBtnRect": null,
+        "hudScrollW": 667,
+        "hudClientW": 667
+      },
+      "panel": {
+        "innerW": 667,
+        "innerH": 375,
+        "docScrollW": 667,
+        "docClientW": 667,
+        "overflowX": 0,
+        "bodyScrollW": 667,
+        "panelVisible": true,
+        "panelRight": 858.65625,
+        "panelLeft": 538.65625,
+        "panelW": 320,
+        "panelOverflowRight": 191.65625,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 56,
+        "canvasW": 538.65625,
+        "canvasH": 303,
+        "canvasBottom": 359,
+        "canvasAspect": 1.7777,
+        "canvasOverflowBottom": 0,
+        "scale": null,
+        "canvasScale": 0.4208251953125,
+        "titleCssPx": null,
+        "titleCssPxFromCanvas": 9.258154296875,
+        "bodyCssPx": null,
+        "patientCssPx": null,
+        "patientCssPxFromCanvas": 6.733203125,
+        "closeBtnRect": {
+          "x": 825.46875,
+          "y": 72,
+          "right": 840.65625,
+          "bottom": 98,
+          "inView": false
+        },
+        "unlockBtnRect": {
+          "right": 840.65625,
+          "bottom": 465.796875,
+          "w": 283,
+          "inView": false
+        },
+        "hudScrollW": 667,
+        "hudClientW": 667
+      },
+      "locked": {
+        "innerW": 667,
+        "innerH": 375,
+        "docScrollW": 667,
+        "docClientW": 667,
+        "overflowX": 0,
+        "bodyScrollW": 667,
+        "panelVisible": true,
+        "panelRight": 858.65625,
+        "panelLeft": 538.65625,
+        "panelW": 320,
+        "panelOverflowRight": 191.65625,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 56,
+        "canvasW": 538.65625,
+        "canvasH": 303,
+        "canvasBottom": 359,
+        "canvasAspect": 1.7777,
+        "canvasOverflowBottom": 0,
+        "scale": null,
+        "canvasScale": 0.4208251953125,
+        "titleCssPx": null,
+        "titleCssPxFromCanvas": 9.258154296875,
+        "bodyCssPx": null,
+        "patientCssPx": null,
+        "patientCssPxFromCanvas": 6.733203125,
+        "closeBtnRect": {
+          "x": 825.46875,
+          "y": 72,
+          "right": 840.65625,
+          "bottom": 98,
+          "inView": false
+        },
+        "unlockBtnRect": {
+          "right": 840.65625,
+          "bottom": 266.796875,
+          "w": 283,
+          "inView": false
+        },
+        "hudScrollW": 667,
+        "hudClientW": 667
+      },
+      "expanded": null,
+      "errs": [],
+      "shots": {
+        "main": "reports/a_zone_candidate_v0_2/shots/landscape_667x375_before_main.png",
+        "panel": "reports/a_zone_candidate_v0_2/shots/landscape_667x375_before_panel.png",
+        "locked": "reports/a_zone_candidate_v0_2/shots/landscape_667x375_before_locked.png",
+        "expanded": null
+      }
+    }
+  ],
+  "after": [
+    {
+      "viewport": "1280x720",
+      "main": {
+        "innerW": 1280,
+        "innerH": 720,
+        "docScrollW": 1280,
+        "docClientW": 1280,
+        "overflowX": 0,
+        "bodyScrollW": 1280,
+        "panelVisible": false,
+        "panelRight": 0,
+        "panelLeft": 0,
+        "panelW": 0,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 50,
+        "canvasTop": 33,
+        "canvasW": 1180,
+        "canvasH": 664,
+        "canvasBottom": 697,
+        "canvasAspect": 1.7771,
+        "canvasOverflowBottom": 0,
+        "scale": 0.921875,
+        "canvasScale": 0.921875,
+        "titleCssPx": 20.28125,
+        "titleCssPxFromCanvas": 20.28125,
+        "bodyCssPx": 13.828125,
+        "patientCssPx": 7.375,
+        "patientCssPxFromCanvas": 14.75,
+        "closeBtnRect": null,
+        "unlockBtnRect": null,
+        "hudScrollW": 1280,
+        "hudClientW": 1280
+      },
+      "panel": {
+        "innerW": 1280,
+        "innerH": 720,
+        "docScrollW": 1280,
+        "docClientW": 1280,
+        "overflowX": 0,
+        "bodyScrollW": 1280,
+        "panelVisible": true,
+        "panelRight": 1280,
+        "panelLeft": 960,
+        "panelW": 320,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 95,
+        "canvasW": 960,
+        "canvasH": 540,
+        "canvasBottom": 635,
+        "canvasAspect": 1.7778,
+        "canvasOverflowBottom": 0,
+        "scale": 0.75,
+        "canvasScale": 0.75,
+        "titleCssPx": 16.5,
+        "titleCssPxFromCanvas": 16.5,
+        "bodyCssPx": 11.25,
+        "patientCssPx": 6,
+        "patientCssPxFromCanvas": 12,
+        "closeBtnRect": {
+          "x": 1238.8125,
+          "y": 56,
+          "right": 1266,
+          "bottom": 82,
+          "inView": true
+        },
+        "unlockBtnRect": {
+          "right": 1266,
+          "bottom": 410.890625,
+          "w": 291,
+          "inView": true
+        },
+        "hudScrollW": 1280,
+        "hudClientW": 1280
+      },
+      "locked": {
+        "innerW": 1280,
+        "innerH": 720,
+        "docScrollW": 1280,
+        "docClientW": 1280,
+        "overflowX": 0,
+        "bodyScrollW": 1280,
+        "panelVisible": true,
+        "panelRight": 1280,
+        "panelLeft": 960,
+        "panelW": 320,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0,
+        "canvasTop": 95,
+        "canvasW": 960,
+        "canvasH": 540,
+        "canvasBottom": 635,
+        "canvasAspect": 1.7778,
+        "canvasOverflowBottom": 0,
+        "scale": 0.75,
+        "canvasScale": 0.75,
+        "titleCssPx": 16.5,
+        "titleCssPxFromCanvas": 16.5,
+        "bodyCssPx": 11.25,
+        "patientCssPx": 6,
+        "patientCssPxFromCanvas": 12,
+        "closeBtnRect": {
+          "x": 1238.8125,
+          "y": 56,
+          "right": 1266,
+          "bottom": 82,
+          "inView": true
+        },
+        "unlockBtnRect": {
+          "right": 1266,
+          "bottom": 233.890625,
+          "w": 291,
+          "inView": true
+        },
+        "hudScrollW": 1280,
+        "hudClientW": 1280
+      },
+      "expanded": {
+        "gpSlots": 3,
+        "phSlots": 2,
+        "gpSlotAnchors": [
+          [
+            350,
+            297
+          ],
+          [
+            430,
+            297
+          ],
+          [
+            510,
+            297
+          ]
+        ],
+        "gpWaitAnchors": [
+          [
+            350,
+            347
+          ],
+          [
+            380,
+            347
+          ],
+          [
+            410,
+            347
+          ]
+        ],
+        "servingAtOnce": [
+          [
+            0,
+            350,
+            297
+          ]
+        ]
+      },
+      "errs": [],
+      "shots": {
+        "main": "reports/a_zone_candidate_v0_2/shots/landscape_1280x720_after_main.png",
+        "panel": "reports/a_zone_candidate_v0_2/shots/landscape_1280x720_after_panel.png",
+        "locked": "reports/a_zone_candidate_v0_2/shots/landscape_1280x720_after_locked.png",
+        "expanded": "reports/a_zone_candidate_v0_2/shots/landscape_1280x720_after_expanded.png"
+      }
+    },
+    {
+      "viewport": "844x390",
+      "main": {
+        "innerW": 844,
+        "innerH": 390,
+        "docScrollW": 844,
+        "docClientW": 844,
+        "overflowX": 0,
+        "bodyScrollW": 844,
+        "panelVisible": false,
+        "panelRight": 0,
+        "panelLeft": 0,
+        "panelW": 0,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 125,
+        "canvasTop": 33,
+        "canvasW": 594,
+        "canvasH": 334,
+        "canvasBottom": 367,
+        "canvasAspect": 1.7784,
+        "canvasOverflowBottom": 0,
+        "scale": 0.4640625,
+        "canvasScale": 0.4640625,
+        "titleCssPx": 14,
+        "titleCssPxFromCanvas": 10.209375,
+        "bodyCssPx": 10.5,
+        "patientCssPx": 5.5,
+        "patientCssPxFromCanvas": 7.425,
+        "closeBtnRect": null,
+        "unlockBtnRect": null,
+        "hudScrollW": 844,
+        "hudClientW": 844
+      },
+      "panel": {
+        "innerW": 844,
+        "innerH": 390,
+        "docScrollW": 844,
+        "docClientW": 844,
+        "overflowX": 0,
+        "bodyScrollW": 844,
+        "panelVisible": true,
+        "panelRight": 844,
+        "panelLeft": 624.5625,
+        "panelW": 219.4375,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 34.78125,
+        "canvasTop": 44,
+        "canvasW": 555,
+        "canvasH": 312,
+        "canvasBottom": 356,
+        "canvasAspect": 1.7788,
+        "canvasOverflowBottom": 0,
+        "scale": 0.43359375,
+        "canvasScale": 0.43359375,
+        "titleCssPx": 13.999999999999998,
+        "titleCssPxFromCanvas": 9.5390625,
+        "bodyCssPx": 10.5,
+        "patientCssPx": 5.5,
+        "patientCssPxFromCanvas": 6.9375,
+        "closeBtnRect": {
+          "x": 802.8125,
+          "y": 56,
+          "right": 830,
+          "bottom": 82,
+          "inView": true
+        },
+        "unlockBtnRect": {
+          "right": 830,
+          "bottom": 410.890625,
+          "w": 190.4375,
+          "inView": false
+        },
+        "hudScrollW": 844,
+        "hudClientW": 844
+      },
+      "locked": {
+        "innerW": 844,
+        "innerH": 390,
+        "docScrollW": 844,
+        "docClientW": 844,
+        "overflowX": 0,
+        "bodyScrollW": 844,
+        "panelVisible": true,
+        "panelRight": 844,
+        "panelLeft": 624.5625,
+        "panelW": 219.4375,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 34.78125,
+        "canvasTop": 44,
+        "canvasW": 555,
+        "canvasH": 312,
+        "canvasBottom": 356,
+        "canvasAspect": 1.7788,
+        "canvasOverflowBottom": 0,
+        "scale": 0.43359375,
+        "canvasScale": 0.43359375,
+        "titleCssPx": 13.999999999999998,
+        "titleCssPxFromCanvas": 9.5390625,
+        "bodyCssPx": 10.5,
+        "patientCssPx": 5.5,
+        "patientCssPxFromCanvas": 6.9375,
+        "closeBtnRect": {
+          "x": 802.8125,
+          "y": 56,
+          "right": 830,
+          "bottom": 82,
+          "inView": true
+        },
+        "unlockBtnRect": {
+          "right": 830,
+          "bottom": 249.984375,
+          "w": 190.4375,
+          "inView": true
+        },
+        "hudScrollW": 844,
+        "hudClientW": 844
+      },
+      "expanded": {
+        "gpSlots": 3,
+        "phSlots": 2,
+        "gpSlotAnchors": [
+          [
+            350,
+            297
+          ],
+          [
+            430,
+            297
+          ],
+          [
+            510,
+            297
+          ]
+        ],
+        "gpWaitAnchors": [
+          [
+            350,
+            347
+          ],
+          [
+            380,
+            347
+          ],
+          [
+            410,
+            347
+          ]
+        ],
+        "servingAtOnce": [
+          [
+            0,
+            350,
+            297
+          ]
+        ]
+      },
+      "errs": [],
+      "shots": {
+        "main": "reports/a_zone_candidate_v0_2/shots/landscape_844x390_after_main.png",
+        "panel": "reports/a_zone_candidate_v0_2/shots/landscape_844x390_after_panel.png",
+        "locked": "reports/a_zone_candidate_v0_2/shots/landscape_844x390_after_locked.png",
+        "expanded": "reports/a_zone_candidate_v0_2/shots/landscape_844x390_after_expanded.png"
+      }
+    },
+    {
+      "viewport": "667x375",
+      "main": {
+        "innerW": 667,
+        "innerH": 375,
+        "docScrollW": 667,
+        "docClientW": 667,
+        "overflowX": 0,
+        "bodyScrollW": 667,
+        "panelVisible": false,
+        "panelRight": 0,
+        "panelLeft": 0,
+        "panelW": 0,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 50,
+        "canvasTop": 33,
+        "canvasW": 567,
+        "canvasH": 319,
+        "canvasBottom": 352,
+        "canvasAspect": 1.7774,
+        "canvasOverflowBottom": 0,
+        "scale": 0.44296875,
+        "canvasScale": 0.44296875,
+        "titleCssPx": 14,
+        "titleCssPxFromCanvas": 9.7453125,
+        "bodyCssPx": 10.5,
+        "patientCssPx": 5.5,
+        "patientCssPxFromCanvas": 7.0875,
+        "closeBtnRect": null,
+        "unlockBtnRect": null,
+        "hudScrollW": 667,
+        "hudClientW": 667
+      },
+      "panel": {
+        "innerW": 667,
+        "innerH": 375,
+        "docScrollW": 667,
+        "docClientW": 667,
+        "overflowX": 0,
+        "bodyScrollW": 667,
+        "panelVisible": true,
+        "panelRight": 667,
+        "panelLeft": 466.90625,
+        "panelW": 200.09375,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0.453125,
+        "canvasTop": 61.5,
+        "canvasW": 466,
+        "canvasH": 262,
+        "canvasBottom": 323.5,
+        "canvasAspect": 1.7786,
+        "canvasOverflowBottom": 0,
+        "scale": 0.3640625,
+        "canvasScale": 0.3640625,
+        "titleCssPx": 13.999999999999998,
+        "titleCssPxFromCanvas": 8.009375,
+        "bodyCssPx": 10.375781250000001,
+        "patientCssPx": 5.096875,
+        "patientCssPxFromCanvas": 5.825,
+        "closeBtnRect": {
+          "x": 625.8125,
+          "y": 56,
+          "right": 653,
+          "bottom": 82,
+          "inView": true
+        },
+        "unlockBtnRect": {
+          "right": 653,
+          "bottom": 410.890625,
+          "w": 171.09375,
+          "inView": false
+        },
+        "hudScrollW": 667,
+        "hudClientW": 667
+      },
+      "locked": {
+        "innerW": 667,
+        "innerH": 375,
+        "docScrollW": 667,
+        "docClientW": 667,
+        "overflowX": 0,
+        "bodyScrollW": 667,
+        "panelVisible": true,
+        "panelRight": 667,
+        "panelLeft": 466.90625,
+        "panelW": 200.09375,
+        "panelOverflowRight": 0,
+        "panelOverflowBottom": 0,
+        "canvasLeft": 0.453125,
+        "canvasTop": 61.5,
+        "canvasW": 466,
+        "canvasH": 262,
+        "canvasBottom": 323.5,
+        "canvasAspect": 1.7786,
+        "canvasOverflowBottom": 0,
+        "scale": 0.3640625,
+        "canvasScale": 0.3640625,
+        "titleCssPx": 13.999999999999998,
+        "titleCssPxFromCanvas": 8.009375,
+        "bodyCssPx": 10.375781250000001,
+        "patientCssPx": 5.096875,
+        "patientCssPxFromCanvas": 5.825,
+        "closeBtnRect": {
+          "x": 625.8125,
+          "y": 56,
+          "right": 653,
+          "bottom": 82,
+          "inView": true
+        },
+        "unlockBtnRect": {
+          "right": 653,
+          "bottom": 249.984375,
+          "w": 171.09375,
+          "inView": true
+        },
+        "hudScrollW": 667,
+        "hudClientW": 667
+      },
+      "expanded": {
+        "gpSlots": 3,
+        "phSlots": 2,
+        "gpSlotAnchors": [
+          [
+            350,
+            297
+          ],
+          [
+            430,
+            297
+          ],
+          [
+            510,
+            297
+          ]
+        ],
+        "gpWaitAnchors": [
+          [
+            350,
+            347
+          ],
+          [
+            380,
+            347
+          ],
+          [
+            410,
+            347
+          ]
+        ],
+        "servingAtOnce": [
+          [
+            0,
+            350,
+            297
+          ]
+        ]
+      },
+      "errs": [],
+      "shots": {
+        "main": "reports/a_zone_candidate_v0_2/shots/landscape_667x375_after_main.png",
+        "panel": "reports/a_zone_candidate_v0_2/shots/landscape_667x375_after_panel.png",
+        "locked": "reports/a_zone_candidate_v0_2/shots/landscape_667x375_after_locked.png",
+        "expanded": "reports/a_zone_candidate_v0_2/shots/landscape_667x375_after_expanded.png"
+      }
+    }
+  ],
+  "recording": null
+}
